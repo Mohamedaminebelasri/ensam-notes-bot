@@ -1,0 +1,30 @@
+# Credentials
+.env
+
+# Données personnelles (notes sauvegardées)
+notes.json
+notes_backup.json
+heartbeat.json
+
+# Logs
+*.log
+bot.log
+bot_log.txt
+
+# Scripts locaux Windows (chemins hardcodés)
+*.bat
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Config locale (contient IP serveur et chemins locaux)
+.claude/

@@ -1,0 +1,12 @@
+app = 'ensam-notes-bot'
+primary_region = 'cdg'
+
+[build]
+
+[processes]
+  app = "python main.py"
+
+[[vm]]
+  memory = '256mb'
+  cpu_kind = 'shared'
+  cpus = 1
