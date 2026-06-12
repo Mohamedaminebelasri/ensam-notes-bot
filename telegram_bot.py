@@ -20,6 +20,8 @@ TOKEN           = os.getenv("TELEGRAM_TOKEN")
 _MAROC          = pytz.timezone('Africa/Casablanca')
 _HEARTBEAT_FILE = os.path.join(os.path.dirname(__file__), "heartbeat.json")
 
+_total_elements = sum(len(m["elements"]) for m in MODULES.values())
+
 
 def _build_notes_dict(notes_list):
     return {
@@ -51,7 +53,7 @@ _HELP_MSG = (
     "❌ /annuler\n"
     "   Annule une simulation en cours\n\n"
     "━━━━━━━━━━━━━━━━━━━\n"
-    "🔔 Je surveille tes 31 éléments S2\n"
+    f"🔔 Je surveille tes {_total_elements} éléments S2\n"
     "   toutes les 5 minutes automatiquement.\n"
     "   Tu seras notifié dès qu'une note change !"
 )
@@ -95,12 +97,17 @@ async def cmd_status(update: Update, context: ContextTypes.DEFAULT_TYPE):
         except Exception:
             pass
 
+    niveau  = os.getenv("NIVEAU",  "3A")
+    filiere = os.getenv("FILIERE", "IATD-SI")
+    total_elements = sum(len(m["elements"]) for m in MODULES.values())
+
     msg = (
         "🟢 <b>Bot actif</b>\n\n"
         f"⏰ Dernière vérification : {last_check_str} (il y a {minutes_ago} min)\n"
         f"🚀 Démarré à : {started_at_str}\n"
-        "📊 31 éléments surveillés\n"
-        "🌍 Serveur : Oracle Cloud\n"
+        f"📊 {total_elements} éléments surveillés\n"
+        f"🎓 Configuration : {niveau} — {filiere}\n"
+        "🖥️ Bot en cours d'exécution\n"
         "✅ Connexion ENSAM : OK"
     )
     await update.message.reply_text(msg, parse_mode="HTML")
