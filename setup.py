@@ -76,6 +76,25 @@ def _test_login(email: str, password: str) -> tuple[bool, str]:
 
 # ─── test Telegram ────────────────────────────────────────────────────────────
 
+def _fetch_chat_id(token: str) -> tuple[str | None, str]:
+    """Appelle getUpdates, retourne (chat_id, erreur)."""
+    url = f"https://api.telegram.org/bot{token}/getUpdates"
+    try:
+        r = requests.get(url, timeout=10)
+        data = r.json()
+        if not data.get("ok"):
+            return None, data.get("description", "Token invalide")
+        for update in reversed(data.get("result", [])):
+            msg = update.get("message") or update.get("channel_post")
+            if msg:
+                cid = str(msg.get("chat", {}).get("id", ""))
+                if cid:
+                    return cid, ""
+        return None, ""
+    except requests.RequestException as e:
+        return None, str(e)
+
+
 def _send_test_telegram(token: str, chat_id: str) -> tuple[bool, str]:
     url  = f"https://api.telegram.org/bot{token}/sendMessage"
     try:
@@ -170,32 +189,36 @@ def step_telegram_chat(existing: dict, token: str) -> str:
     _sep()
     _print("💬  Étape 3/4 — Chat ID Telegram")
     _print()
-    _print("   Pour trouver ton Chat ID :")
-    _print("   1. Ouvre Telegram, cherche @userinfobot")
-    _print("   2. Envoie /start — il te donnera ton ID")
+    _print("   📱 Maintenant, ouvre Telegram, cherche ton bot")
+    _print("      (que tu viens de créer), et envoie-lui n'importe")
+    _print("      quel message (ex: 'salut').")
     _print()
 
-    default = existing.get("TELEGRAM_CHAT_ID", "")
-    while True:
-        prompt  = f"   Chat ID [{default}] : " if default else "   Chat ID : "
-        chat_id = input(prompt).strip() or default
-        if not chat_id:
-            _err("Le Chat ID ne peut pas être vide.")
+    for attempt in range(5):
+        prompt = "   Appuie sur Entrée une fois fait... " if attempt == 0 \
+                 else "   Appuie sur Entrée pour réessayer... "
+        input(prompt)
+
+        chat_id, err = _fetch_chat_id(token)
+
+        if err:
+            _err(f"Erreur API Telegram : {err}")
             continue
 
+        if not chat_id:
+            _err("Aucun message reçu. As-tu bien envoyé un message")
+            _print("   à TON bot (pas à un autre) ? Réessaie.")
+            _print()
+            continue
+
+        _ok(f"Détecté ! Ton ID Telegram : {chat_id}")
         _print("   Envoi d'un message de test...")
-        ok, reason = _send_test_telegram(token, chat_id)
-        if ok:
-            _ok("Message envoyé !")
-            while True:
-                rep = input("   Tu as bien reçu le message sur Telegram ? (o/n) : ").strip().lower()
-                if rep in ("o", "oui", "y", "yes"):
-                    return chat_id
-                if rep in ("n", "non", "no"):
-                    _err("Réessaie avec un autre token ou Chat ID.")
-                    return step_telegram_chat(existing, token)
-        else:
-            _err(f"Échec : {reason}. Vérifie le token et le Chat ID.")
+        _send_test_telegram(token, chat_id)
+        _ok("Message de confirmation envoyé !")
+        return chat_id
+
+    _err("Trop de tentatives échouées. Relance setup.py et réessaie.")
+    raise SystemExit(1)
 
 
 def step_filiere(existing: dict) -> str:
