@@ -13,6 +13,8 @@ bot_log.txt
 
 # Scripts locaux Windows (chemins hardcodés)
 *.bat
+!installer.bat
+!lancer.bat
 
 # Python
 venv/
@@ -21,6 +23,11 @@ __pycache__/
 *.pyo
 *.pyd
 .Python
+
+# Fichiers de développement / debug
+debug_*.html
+test_form.py
+inspect_html.py
 
 # OS
 .DS_Store
