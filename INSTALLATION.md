@@ -125,6 +125,51 @@ Pour recevoir des notifications même quand ton PC est éteint, tu peux déploye
 
 ---
 
+## 💻 Tu es sur Mac ou Linux ?
+
+Utilise **`lancer.sh`** au lieu de `lancer.bat`. La logique est identique : détection Python, installation des dépendances, configuration, démarrage du bot.
+
+### Sur Mac
+
+1. Ouvre le **Terminal** (Cmd+Espace → "Terminal")
+2. Navigue jusqu'au dossier extrait :
+   ```bash
+   cd ~/Desktop/ensam-notes-bot
+   ```
+3. Lance le script :
+   ```bash
+   ./lancer.sh
+   ```
+
+> **Si tu obtiens "Permission refusée"**, rends le script exécutable d'abord :
+> ```bash
+> chmod +x lancer.sh
+> ```
+
+> **Si `python3` n'est pas trouvé** : installe-le via `brew install python3`
+> (nécessite [Homebrew](https://brew.sh)) ou depuis [python.org](https://www.python.org/downloads/).
+
+### Sur Linux
+
+Même procédure dans un terminal :
+```bash
+cd ~/Bureau/ensam-notes-bot   # ou le dossier où tu as extrait le ZIP
+chmod +x lancer.sh
+./lancer.sh
+```
+
+> **Si `python3` n'est pas trouvé** :
+> ```bash
+> sudo apt install python3 python3-pip python3-venv   # Debian/Ubuntu
+> sudo dnf install python3                             # Fedora/RHEL
+> ```
+
+### Différence avec Windows
+
+Contrairement à `lancer.bat`, `lancer.sh` utilise un **environnement virtuel** (`venv/`) plutôt qu'un Python portable téléchargé — car Python est généralement déjà présent sur Mac/Linux.
+
+---
+
 ## 🛠️ Dépannage
 
 ### Le bot ne démarre pas / erreur au lancement
