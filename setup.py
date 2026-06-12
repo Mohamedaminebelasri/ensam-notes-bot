@@ -5,7 +5,6 @@ Lance avec : python setup.py
 
 import os
 import sys
-import getpass
 import requests
 from pathlib import Path
 
@@ -135,7 +134,9 @@ def step_school(existing: dict) -> tuple[str, str]:
         prompt_email  = f"   Email [{default_email}] : " if default_email else "   Email : "
         email = input(prompt_email).strip() or default_email
 
-        password = getpass.getpass("   Mot de passe : ")
+        print("   ⚠️  Ton mot de passe sera visible à l'écran —")
+        print("       assure-toi d'être seul devant ton PC.")
+        password = input("   Mot de passe : ")
 
         _print("   Vérification de la connexion...")
         ok, reason = _test_login(email, password)
