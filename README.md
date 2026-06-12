@@ -1,69 +1,89 @@
 # 🎓 ENSAM Notes Bot
 
-Bot Telegram qui surveille automatiquement tes notes sur SchoolApp ENSAM et t'envoie une notification dès qu'une note change.
+Surveille tes notes sur SchoolApp ENSAM-UMI et te notifie instantanément sur Telegram dès qu'une note est publiée — avec calcul automatique du minimum requis pour valider chaque module.
+
+---
+
+## ⚠️ Avertissement important
+
+- Projet **étudiant NON-OFFICIEL**, créé par un étudiant pour les étudiants de l'ENSAM Meknès
+- **Pas affilié** à l'ENSAM ni à l'Université Moulay Ismail
+- Accès en **lecture seule** à tes notes (aucune modification possible)
+- **Open source** — le code est 100 % visible et vérifiable sur cette page
+
+---
+
+## 🔒 Confidentialité
+
+- Tes identifiants restent **sur ton ordinateur** (ou ton propre serveur), dans un fichier `.env` local jamais partagé
+- **Aucune donnée** n'est envoyée à un serveur tiers
+- Les notifications passent par **ton propre bot Telegram**, créé et contrôlé par toi
+- Le code est public : tu peux vérifier toi-même qu'aucune donnée n'est collectée
+
+---
 
 ## ✨ Fonctionnalités
 
-- 🔔 Notification automatique dès qu'une note est publiée
-- 🧮 Calcul du minimum requis pour valider chaque module
-- 📊 `/bilan` — résumé complet en direct
-- 🔵 `/sim` — simulateur de notes interactif
-- 📡 `/status` — état du bot
-- 🔄 Reconnexion automatique si session expirée
-- 💾 Backup automatique des données
+- 🔔 **Notification automatique** dès qu'une note est publiée sur SchoolApp
+- 🧮 **Calcul du minimum requis** pour valider chaque module (examen final)
+- 📊 **`/bilan`** — résumé complet de toutes tes notes en temps réel
+- 🔵 **`/sim`** — simulateur interactif : teste différentes hypothèses d'examen
+- 📡 **`/status`** — état du bot et heure de la dernière vérification
+- 🔄 **Reconnexion automatique** si la session SchoolApp expire
+- 💾 **Backup automatique** des données à chaque vérification
+- 🎓 **11 filières** de 3ème Année S2 supportées
+
+---
+
+## 🎓 Filières supportées (3ème Année, Semestre 2)
+
+| Code | | Code | | Code |
+|---|---|---|---|---|
+| GC24 | | GE-DI | | GE-MCI |
+| GI-ILSI | | GIEO | | GIP24 |
+| GM-CISM | | GM-IMS | | GM-MPF |
+| GME24 | | IATD-SI | | |
+
+---
 
 ## 🚀 Installation
 
-1. Clone le repo :
+Voir **[INSTALLATION.md](INSTALLATION.md)** — guide pas à pas sans connaissances techniques requises (~15 minutes).
 
-```bash
-git clone https://github.com/TON_USERNAME/ensam-notes-bot.git
-cd ensam-notes-bot
-```
+**En résumé :**
+1. Télécharger le ZIP du projet
+2. Créer un bot Telegram (via @BotFather, 2 min)
+3. Double-clic sur `lancer.bat` — il gère tout automatiquement
+4. Envoyer `/bilan` à ton bot pour vérifier
 
-2. Installe les dépendances :
+---
 
-```bash
-pip install -r requirements.txt
-```
-
-3. Configure le `.env` :
-
-```bash
-cp .env.example .env
-# Remplis avec tes vraies valeurs
-```
-
-4. Lance le bot :
-
-```bash
-python main.py
-```
-
-## ⚙️ Configuration `.env`
-
-Copie `.env.example` en `.env` et remplis :
-
-| Variable | Description |
-|---|---|
-| `SCHOOL_EMAIL` | Ton email SchoolApp ENSAM |
-| `SCHOOL_PASSWORD` | Ton mot de passe SchoolApp |
-| `TELEGRAM_TOKEN` | Token de ton bot (via [@BotFather](https://t.me/BotFather)) |
-| `TELEGRAM_CHAT_ID` | Ton ID Telegram (via [@userinfobot](https://t.me/userinfobot)) |
-
-## 🏗️ Structure
+## 🛠️ Architecture technique
 
 | Fichier | Rôle |
 |---|---|
-| `scraper.py` | Login + extraction des notes |
-| `comparator.py` | Détection des changements |
-| `calculator.py` | Calculs des moyennes |
-| `notifier.py` | Messages Telegram |
-| `modules.py` | Coefficients S2 ENSAM IATD-SI |
-| `sim_handler.py` | Commande `/sim` interactive |
-| `telegram_bot.py` | Commandes Telegram |
-| `main.py` | Orchestration principale |
+| `lancer.bat` | Point d'entrée unique : installe Python portable, lance setup ou le bot |
+| `setup.py` | Assistant de configuration interactif (identifiants, token, filière) |
+| `main.py` | Orchestration : boucle de surveillance + bot Telegram |
+| `scraper.py` | Connexion à SchoolApp, extraction des notes |
+| `comparator.py` | Détection des changements entre deux relevés |
+| `calculator.py` | Calcul des moyennes et du minimum requis |
+| `notifier.py` | Formatage et envoi des messages Telegram |
+| `modules.py` | Chargement dynamique des coefficients selon la filière |
+| `filieres_database.py` | Base de données des coefficients — 11 filières, générée par scraping |
+| `sim_handler.py` | Logique de la commande `/sim` |
+| `telegram_bot.py` | Gestion des commandes Telegram (`/bilan`, `/sim`, `/status`) |
 
-## ☁️ Déploiement 24/7
+---
 
-Compatible Oracle Cloud Free Tier (toujours gratuit) ou [Fly.io](https://fly.io) via le `Dockerfile` et `fly.toml` inclus.
+## 📜 Licence
+
+MIT — voir [LICENSE](LICENSE)
+
+---
+
+## 🙏 Contact
+
+Créé par **Mohamed Amine Belasri** — ENSAM Meknès, promotion 2024–2027
+
+Pour toute question ou demande d'aide à l'installation, contacte-moi directement.
