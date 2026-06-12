@@ -54,22 +54,54 @@ if not exist "%PY%" (
 )
 
 :: =============================================================================
-:: 2. Configuration (1ere fois : creation du .env)
+:: 2. Menu de choix
 :: =============================================================================
-if not exist "%BASE%.env" (
-    echo  Premiere utilisation -- configuration du bot...
+if not exist "%BASE%.env" goto :first_run
+
+echo.
+echo  ============================================
+echo   Configuration existante trouvee
+echo  ============================================
+echo   [1] Continuer  ^(lancer le bot normalement^)
+echo   [2] Reconfigurer  ^(identifiants/bot/niveau/filiere^)
+echo.
+
+:menu
+set "CHOIX="
+set /p "CHOIX=  Ton choix (1 ou 2) : "
+if "!CHOIX!"=="1" goto :start
+if "!CHOIX!"=="2" goto :reconfig
+echo.
+echo   Choix invalide. Entre 1 ou 2.
+echo.
+goto :menu
+
+:first_run
+echo  Premiere utilisation -- configuration du bot...
+echo.
+"%PY%" "%BASE%setup.py"
+if errorlevel 1 (
     echo.
-    "%PY%" "%BASE%setup.py"
-    if errorlevel 1 (
-        echo.
-        echo  Configuration annulee. Relance lancer.bat pour recommencer.
-        pause
-        exit /b 1
-    )
-    echo.
+    echo  Configuration annulee. Relance lancer.bat pour recommencer.
+    pause
+    exit /b 1
 )
+echo.
+goto :start
+
+:reconfig
+echo.
+"%PY%" "%BASE%setup.py"
+if errorlevel 1 (
+    echo.
+    echo  Configuration annulee.
+    pause
+    exit /b 1
+)
+echo.
 
 :: =============================================================================
+:start
 :: 3. Demarrage du bot
 :: =============================================================================
 echo  Demarrage du bot... ^(Ctrl+C pour arreter^)

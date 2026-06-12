@@ -49,23 +49,30 @@ else
 fi
 
 # =============================================================================
-# 3. Configuration (1ère fois : création du .env)
+# 3. Lancement
 # =============================================================================
-if [ ! -f "$SCRIPT_DIR/.env" ]; then
+if [ -f "$SCRIPT_DIR/.env" ]; then
+    echo ""
+    echo " ============================================"
+    echo "   Configuration existante trouvée"
+    echo " ============================================"
+    echo "   [1] Continuer  (lancer le bot normalement)"
+    echo "   [2] Reconfigurer  (identifiants/bot/niveau/filière)"
+    echo ""
+    read -rp " Ton choix (1 ou 2) : " choix
+    case "$choix" in
+        2)  echo ""
+            "$SCRIPT_DIR/venv/bin/python" "$SCRIPT_DIR/setup.py" && \
+            "$SCRIPT_DIR/venv/bin/python" "$SCRIPT_DIR/main.py" \
+            || { echo ""; echo " Configuration annulée."; } ;;
+        *)  echo " Démarrage du bot... (Ctrl+C pour arrêter)"
+            echo ""
+            "$SCRIPT_DIR/venv/bin/python" "$SCRIPT_DIR/main.py" ;;
+    esac
+else
     echo " Première utilisation — configuration du bot..."
     echo ""
-    "$SCRIPT_DIR/venv/bin/python" "$SCRIPT_DIR/setup.py"
-    if [ $? -ne 0 ]; then
-        echo ""
-        echo " Configuration annulée. Relance ./lancer.sh pour recommencer."
-        exit 1
-    fi
-    echo ""
+    "$SCRIPT_DIR/venv/bin/python" "$SCRIPT_DIR/setup.py" && \
+    "$SCRIPT_DIR/venv/bin/python" "$SCRIPT_DIR/main.py" \
+    || { echo ""; echo " Configuration annulée. Relance ./lancer.sh pour recommencer."; exit 1; }
 fi
-
-# =============================================================================
-# 4. Démarrage du bot
-# =============================================================================
-echo " Démarrage du bot... (Ctrl+C pour arrêter)"
-echo ""
-"$SCRIPT_DIR/venv/bin/python" "$SCRIPT_DIR/main.py"
