@@ -76,6 +76,14 @@ Voir **[INSTALLATION.md](INSTALLATION.md)** — guide pas à pas sans connaissan
 
 ---
 
+## 🆘 Besoin d'aide ?
+
+1. Consulte la **[FAQ dans INSTALLATION.md](INSTALLATION.md#️⃣-faq----problèmes-fréquents)** — la plupart des problèmes y sont couverts
+2. Ouvre une **[Issue sur GitHub](https://github.com/Mohamedaminebelasri/ensam-notes-bot/issues)**
+3. Précise : ta filière, l'étape concernée, et le message d'erreur exact (capture d'écran bienvenue)
+
+---
+
 ## 📜 Licence
 
 MIT — voir [LICENSE](LICENSE)

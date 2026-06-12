@@ -170,29 +170,62 @@ Contrairement à `lancer.bat`, `lancer.sh` utilise un **environnement virtuel** 
 
 ---
 
-## 🛠️ Dépannage
+## 🛠️ FAQ — Problèmes fréquents
 
-### Le bot ne démarre pas / erreur au lancement
-- Vérifie ta connexion internet (nécessaire à la première installation)
-- Supprime le dossier `runtime/` et relance `lancer.bat` pour réinstaller Python
+### ❓ Windows affiche "L'éditeur n'a pas pu être vérifié"
+C'est normal pour tout fichier `.bat` téléchargé depuis Internet — ce n'est pas un virus.
+- Clique sur **"Informations complémentaires"** puis **"Exécuter quand même"**
+- Si tu veux vérifier par toi-même : clique droit sur `lancer.bat` → **Modifier** pour lire le code
 
-### "Identifiants incorrects" alors que le mot de passe est bon
-- Vérifie que tu utilises bien l'email de ton compte SchoolApp ENSAM (format `prenom.nom@edu.umi.ac.ma` ou email personnel selon ton inscription)
-- Essaie de te connecter manuellement sur [schoolapp.ensam-umi.ac.ma](https://schoolapp.ensam-umi.ac.ma) pour confirmer
+### ❓ BotFather dit "Sorry, this username is already taken" ou "invalid"
+Le username est trop court ou déjà pris. Règles :
+- Doit se terminer par `_bot`
+- Au moins 5 caractères avant `_bot`
+- Format recommandé : **`[prénom][4 chiffres]_bot`** (ex : `sara4821_bot`, `karim7392_bot`)
 
-### "Aucun message reçu" à l'étape Chat ID
-- Assure-toi d'avoir envoyé un message **à ton bot** (pas à un autre contact)
-- Le bot doit être celui créé à l'Étape 2 (vérifie le username `@ton_bot_username`)
-- Renvoie un message et réessaie
+### ❓ "Identifiants refusés par le serveur"
+- Vérifie ton **email SchoolApp** : c'est l'adresse avec laquelle tu te connectes sur [schoolapp.ensam-umi.ac.ma](https://schoolapp.ensam-umi.ac.ma), pas ton Gmail personnel
+- Le mot de passe est affiché à l'écran — vérifie qu'il n'y a pas de faute de frappe
+- Essaie de te connecter manuellement sur SchoolApp pour confirmer que tes identifiants fonctionnent
 
-### Je veux changer de filière ou mettre à jour mes identifiants
+### ❓ "Aucun message reçu" après avoir envoyé "salut" à mon bot
+- As-tu cherché **ton bot** par son username exact (celui donné par BotFather à l'Étape 2) ?
+- Le message doit être envoyé **à ton bot**, pas à un contact ou groupe quelconque
+- Renvoie un message, puis appuie sur Entrée dans le terminal pour réessayer
+
+### ❓ "Conflict: terminated by other getUpdates request" / le bot ne répond plus
+Une autre instance du bot tourne déjà avec ce token (ex : une fenêtre `lancer.bat` encore ouverte en arrière-plan).
+- Ferme **toutes** les fenêtres du bot
+- Attends 10 secondes
+- Relance `lancer.bat`
+
+### ❓ Des avertissements "WARNING: script ... not on PATH" s'affichent pendant l'installation
+Ces avertissements sont **normaux** et sans impact — les dépendances sont bien installées. Ignore-les.
+
+### ❓ Comment trouver ma filière exacte ?
+Sur SchoolApp : **"Plan Etudes"** → **3ème Année** → **2ème Semestre**
+Compare les codes de modules affichés (ex : `IA21`, `IA22`…) avec ceux dans **"Mes Notes"** — ils correspondent à une filière dans la liste.
+
+### ❓ Le bot affiche "Filière inconnue"
+Le fichier `.env` contient une valeur incorrecte pour `FILIERE=`.
+- Supprime `.env` et relance `lancer.bat` pour reconfigurer
+- La filière doit être l'un des 11 codes exacts : `GC24`, `GE-DI`, `GE-MCI`, `GI-ILSI`, `GIEO`, `GIP24`, `GM-CISM`, `GM-IMS`, `GM-MPF`, `GME24`, `IATD-SI`
+
+### ❓ Je veux changer de filière ou mettre à jour mes identifiants
 - Supprime le fichier `.env` dans le dossier du projet
-- Relance `lancer.bat` — la configuration repart depuis le début
+- Relance `lancer.bat` (Windows) ou `./lancer.sh` (Mac/Linux) — la configuration repart depuis le début
 
-### Les notifications ne viennent plus
-- Envoie `/status` à ton bot pour vérifier qu'il tourne
-- Si le bot est arrêté, relance `lancer.bat`
+### ❓ Mon antivirus bloque lancer.bat
+`lancer.bat` est un **script texte** (pas un `.exe` compilé) — tu peux lire son contenu intégralement.
+- Clique droit → **Modifier** pour vérifier le code
+- Le projet est open source : tout le code est visible sur [GitHub](https://github.com/Mohamedaminebelasri/ensam-notes-bot)
+- Si ton antivirus bloque malgré tout, utilise `lancer.sh` dans Git Bash ou contacte-moi
+
+### ❓ Le bot ne démarre plus / erreur au lancement
+- Vérifie ta connexion internet (nécessaire à la première installation)
+- **Windows :** supprime le dossier `runtime/` et relance `lancer.bat` pour réinstaller Python
+- **Mac/Linux :** supprime le dossier `venv/` et relance `./lancer.sh`
 
 ---
 
-*Pour tout autre problème, contacte Mohamed Amine Belasri.*
+*Problème non listé ? Ouvre une [Issue sur GitHub](https://github.com/Mohamedaminebelasri/ensam-notes-bot/issues) en précisant ta filière, l'étape concernée et le message d'erreur exact.*
