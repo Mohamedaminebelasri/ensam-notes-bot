@@ -16,6 +16,11 @@ bot_log.txt
 !installer.bat
 !lancer.bat
 
+# Python portable (téléchargé par lancer.bat, ne pas pousser sur GitHub)
+runtime/
+temp/
+*.zip
+
 # Python
 venv/
 __pycache__/
