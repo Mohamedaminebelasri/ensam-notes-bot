@@ -1,4 +1,10 @@
-MODULES = {
+import os as _os
+from dotenv import load_dotenv as _load_dotenv
+
+_load_dotenv()
+
+# Données IATD-SI codées en dur : fallback si filieres_database.py est absent
+_MODULES_IATD_SI = {
     "IA21": {
         "nom": "Techniques Avancées d'Apprentissage Automatique et Séries Chronologiques",
         "coef_mod": 5.0, "seuil": 12.0, "eliminatoire": 8.0,
@@ -90,3 +96,30 @@ MODULES = {
         }
     },
 }
+
+
+def _load_modules():
+    filiere = _os.getenv("FILIERE", "IATD-SI")
+    try:
+        from filieres_database import FILIERES
+        known = sorted(FILIERES.keys())
+        if filiere not in FILIERES:
+            print(f"❌ Filière '{filiere}' inconnue.", flush=True)
+            print(f"   Filières disponibles : {known}", flush=True)
+            raise SystemExit(1)
+        mods = FILIERES[filiere]["modules"]
+        print(f"[MODULES] Filière chargée : {filiere} ({len(mods)} modules)", flush=True)
+        return mods
+    except ImportError:
+        if filiere != "IATD-SI":
+            print(
+                f"❌ filieres_database.py introuvable et filière demandée '{filiere}' ≠ IATD-SI.\n"
+                f"   Lance explore_coefficients.py pour générer la base de données.",
+                flush=True,
+            )
+            raise SystemExit(1)
+        print("[MODULES] filieres_database.py absent — fallback IATD-SI (données intégrées)", flush=True)
+        return _MODULES_IATD_SI
+
+
+MODULES = _load_modules()

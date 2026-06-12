@@ -1,0 +1,1865 @@
+{
+  "GC24": {
+    "nom_complet": "GC24",
+    "modules": {
+      "GC21": {
+        "nom": "Terrassement et Dimensionement des chaussées, Géophysique",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "GC211": {
+            "nom": "Terrassement",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          },
+          "GC212": {
+            "nom": "Conception et dimensionnement des chauss",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          },
+          "GC213": {
+            "nom": "Géophysique Appliquée",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 0.7,
+            "coef_tp": 0.3,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "GC22": {
+        "nom": "Formulation et Comportement du béton, béton armé",
+        "coef_mod": 4.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "GC221": {
+            "nom": "Formulation du béton",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          },
+          "GC222": {
+            "nom": "Comportement du béton, béton armé",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "GC23": {
+        "nom": "Mécanique des Sols II et RDM avancée",
+        "coef_mod": 4.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "GC231": {
+            "nom": "Mécanique des Sols II",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          },
+          "GC232": {
+            "nom": "RDM avancée",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "GC24": {
+        "nom": "Mécanique des fluides et Hydrologie",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "GC241": {
+            "nom": "Hydrologie ,Hydrogéologie",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          },
+          "GC242": {
+            "nom": "Mécanique des fluides",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          }
+        }
+      },
+      "LE2": {
+        "nom": "Langues Etrangères (Anglais, Français)",
+        "coef_mod": 3.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "LE21": {
+            "nom": "Langue Anglaise",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 1.0,
+            "coef_elem": 2.0
+          },
+          "LE22": {
+            "nom": "Langue Française",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 1.0,
+            "coef_elem": 2.0
+          }
+        }
+      },
+      "PS2": {
+        "nom": "Culture and Art Skills",
+        "coef_mod": 3.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PS21": {
+            "nom": "Arts",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          },
+          "PS22": {
+            "nom": "Culture",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          }
+        }
+      },
+      "TC21": {
+        "nom": "Modélisation statistique et recherche operationnelle",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "TC211": {
+            "nom": "Modélisation Statistique",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 2.0,
+            "coef_tp": 0.5,
+            "coef_elem": 2.5
+          },
+          "TC212": {
+            "nom": "Recherche Opérationnelle",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      }
+    }
+  },
+  "GE-DI": {
+    "nom_complet": "GE-DI",
+    "modules": {
+      "LE2": {
+        "nom": "Langues Etrangères (Anglais, Français)",
+        "coef_mod": 3.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "LE21": {
+            "nom": "Langue Anglaise",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 1.0,
+            "coef_elem": 2.0
+          },
+          "LE22": {
+            "nom": "Langue Française",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 1.0,
+            "coef_elem": 2.0
+          }
+        }
+      },
+      "PEI21": {
+        "nom": "Electronique et Programmation Orientée objet",
+        "coef_mod": 4.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PEI211": {
+            "nom": "Electronique",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          },
+          "PEI212": {
+            "nom": "Programmation orientée objet",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PEI22": {
+        "nom": "Transmissions mécaniques et actionneurs électromécaniques",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PEI221": {
+            "nom": "Transmissions mécaniques et actionneurs",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 0.6,
+            "coef_tp": 0.4,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PEI23": {
+        "nom": "Matériaux industriels",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PEI231": {
+            "nom": "Matériaux Métalliques",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          },
+          "PEI232": {
+            "nom": "Plastiques et composites",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PS2": {
+        "nom": "Culture and Art Skills",
+        "coef_mod": 3.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PS21": {
+            "nom": "Arts",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          },
+          "PS22": {
+            "nom": "Culture",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          }
+        }
+      },
+      "TC21": {
+        "nom": "Modélisation statistique et recherche operationnelle",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "TC211": {
+            "nom": "Modélisation Statistique",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 2.0,
+            "coef_tp": 0.5,
+            "coef_elem": 2.5
+          },
+          "TC212": {
+            "nom": "Recherche Opérationnelle",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "TC23": {
+        "nom": "Mécanique des fluides et machines thermiques",
+        "coef_mod": 4.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "TC231": {
+            "nom": "Mécanique des fluides",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.5,
+            "coef_tp": 0.5,
+            "coef_elem": 2.0
+          },
+          "TC232": {
+            "nom": "Machines thermiques",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      }
+    }
+  },
+  "GE-MCI": {
+    "nom_complet": "GE-MCI",
+    "modules": {
+      "LE2": {
+        "nom": "Langues Etrangères (Anglais, Français)",
+        "coef_mod": 3.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "LE21": {
+            "nom": "Langue Anglaise",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 1.0,
+            "coef_elem": 2.0
+          },
+          "LE22": {
+            "nom": "Langue Française",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 1.0,
+            "coef_elem": 2.0
+          }
+        }
+      },
+      "PEI21": {
+        "nom": "Electronique et Programmation Orientée objet",
+        "coef_mod": 4.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PEI211": {
+            "nom": "Electronique",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          },
+          "PEI212": {
+            "nom": "Programmation orientée objet",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PEI22": {
+        "nom": "Transmissions mécaniques et actionneurs électromécaniques",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PEI221": {
+            "nom": "Transmissions mécaniques et actionneurs",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 0.6,
+            "coef_tp": 0.4,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PEI23": {
+        "nom": "Matériaux industriels",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PEI231": {
+            "nom": "Matériaux Métalliques",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          },
+          "PEI232": {
+            "nom": "Plastiques et composites",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PS2": {
+        "nom": "Culture and Art Skills",
+        "coef_mod": 3.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PS21": {
+            "nom": "Arts",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          },
+          "PS22": {
+            "nom": "Culture",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          }
+        }
+      },
+      "TC21": {
+        "nom": "Modélisation statistique et recherche operationnelle",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "TC211": {
+            "nom": "Modélisation Statistique",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 2.0,
+            "coef_tp": 0.5,
+            "coef_elem": 2.5
+          },
+          "TC212": {
+            "nom": "Recherche Opérationnelle",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "TC23": {
+        "nom": "Mécanique des fluides et machines thermiques",
+        "coef_mod": 4.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "TC231": {
+            "nom": "Mécanique des fluides",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.5,
+            "coef_tp": 0.5,
+            "coef_elem": 2.0
+          },
+          "TC232": {
+            "nom": "Machines thermiques",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      }
+    }
+  },
+  "GI-ILSI": {
+    "nom_complet": "GI-ILSI",
+    "modules": {
+      "INFO21": {
+        "nom": "Bases de données et Data Mining",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "INFO211": {
+            "nom": "Bases de Données Relationnelles",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          },
+          "INFO212": {
+            "nom": "Analyse de données et Data Mining",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "INFO22": {
+        "nom": "Théorie de langages et Compilation",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "INFO221": {
+            "nom": "Théorie des langages",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          },
+          "INFO222": {
+            "nom": "Compilation",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "INFO23": {
+        "nom": "Développement Web et Mobile",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "INFO231": {
+            "nom": "Développement Web",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.5,
+            "coef_tp": 0.0,
+            "coef_elem": 1.5
+          },
+          "INFO232": {
+            "nom": "Développement Mobile",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "INFO24": {
+        "nom": "Systèmes embarqués et robotique",
+        "coef_mod": 4.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "INFO241": {
+            "nom": "Systèmes embarqués et temps réel",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.5,
+            "coef_tp": 0.5,
+            "coef_elem": 2.0
+          },
+          "INFO242": {
+            "nom": "Initiation à la robotique",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.5,
+            "coef_tp": 0.5,
+            "coef_elem": 2.0
+          }
+        }
+      },
+      "INFO25": {
+        "nom": "Modélisation statistique et recherche opérationnelle",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "INFO251": {
+            "nom": "Modélisation Statistique",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          },
+          "INFO252": {
+            "nom": "Recherche Opérationnelle",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "LE2": {
+        "nom": "Langues Etrangères (Anglais, Français)",
+        "coef_mod": 3.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "LE21": {
+            "nom": "Langue Anglaise",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 1.0,
+            "coef_elem": 2.0
+          },
+          "LE22": {
+            "nom": "Langue Française",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 1.0,
+            "coef_elem": 2.0
+          }
+        }
+      },
+      "PS2": {
+        "nom": "Culture and Art Skills",
+        "coef_mod": 3.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PS21": {
+            "nom": "Arts",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          },
+          "PS22": {
+            "nom": "Culture",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          }
+        }
+      }
+    }
+  },
+  "GIEO": {
+    "nom_complet": "GIEO",
+    "modules": {
+      "LE2": {
+        "nom": "Langues Etrangères (Anglais, Français)",
+        "coef_mod": 3.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "LE21": {
+            "nom": "Langue Anglaise",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 1.0,
+            "coef_elem": 2.0
+          },
+          "LE22": {
+            "nom": "Langue Française",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 1.0,
+            "coef_elem": 2.0
+          }
+        }
+      },
+      "PEI21": {
+        "nom": "Electronique et Programmation Orientée objet",
+        "coef_mod": 4.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PEI211": {
+            "nom": "Electronique",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          },
+          "PEI212": {
+            "nom": "Programmation orientée objet",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PEI22": {
+        "nom": "Transmissions mécaniques et actionneurs électromécaniques",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PEI221": {
+            "nom": "Transmissions mécaniques et actionneurs",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 0.6,
+            "coef_tp": 0.4,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PEI23": {
+        "nom": "Matériaux industriels",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PEI231": {
+            "nom": "Matériaux Métalliques",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          },
+          "PEI232": {
+            "nom": "Plastiques et composites",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PS2": {
+        "nom": "Culture and Art Skills",
+        "coef_mod": 3.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PS21": {
+            "nom": "Arts",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          },
+          "PS22": {
+            "nom": "Culture",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          }
+        }
+      },
+      "TC21": {
+        "nom": "Modélisation statistique et recherche operationnelle",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "TC211": {
+            "nom": "Modélisation Statistique",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 2.0,
+            "coef_tp": 0.5,
+            "coef_elem": 2.5
+          },
+          "TC212": {
+            "nom": "Recherche Opérationnelle",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "TC23": {
+        "nom": "Mécanique des fluides et machines thermiques",
+        "coef_mod": 4.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "TC231": {
+            "nom": "Mécanique des fluides",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.5,
+            "coef_tp": 0.5,
+            "coef_elem": 2.0
+          },
+          "TC232": {
+            "nom": "Machines thermiques",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      }
+    }
+  },
+  "GIP24": {
+    "nom_complet": "GIP24",
+    "modules": {
+      "LE2": {
+        "nom": "Langues Etrangères (Anglais, Français)",
+        "coef_mod": 3.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "LE21": {
+            "nom": "Langue Anglaise",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 1.0,
+            "coef_elem": 2.0
+          },
+          "LE22": {
+            "nom": "Langue Française",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 1.0,
+            "coef_elem": 2.0
+          }
+        }
+      },
+      "PEI21": {
+        "nom": "Electronique et Programmation Orientée objet",
+        "coef_mod": 4.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PEI211": {
+            "nom": "Electronique",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          },
+          "PEI212": {
+            "nom": "Programmation orientée objet",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PEI22": {
+        "nom": "Transmissions mécaniques et actionneurs électromécaniques",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PEI221": {
+            "nom": "Transmissions mécaniques et actionneurs",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 0.6,
+            "coef_tp": 0.4,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PEI23": {
+        "nom": "Matériaux industriels",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PEI231": {
+            "nom": "Matériaux Métalliques",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          },
+          "PEI232": {
+            "nom": "Plastiques et composites",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PS2": {
+        "nom": "Culture and Art Skills",
+        "coef_mod": 3.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PS21": {
+            "nom": "Arts",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          },
+          "PS22": {
+            "nom": "Culture",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          }
+        }
+      },
+      "TC21": {
+        "nom": "Modélisation statistique et recherche operationnelle",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "TC211": {
+            "nom": "Modélisation Statistique",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 2.0,
+            "coef_tp": 0.5,
+            "coef_elem": 2.5
+          },
+          "TC212": {
+            "nom": "Recherche Opérationnelle",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "TC23": {
+        "nom": "Mécanique des fluides et machines thermiques",
+        "coef_mod": 4.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "TC231": {
+            "nom": "Mécanique des fluides",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.5,
+            "coef_tp": 0.5,
+            "coef_elem": 2.0
+          },
+          "TC232": {
+            "nom": "Machines thermiques",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      }
+    }
+  },
+  "GM-CISM": {
+    "nom_complet": "GM-CISM",
+    "modules": {
+      "LE2": {
+        "nom": "Langues Etrangères (Anglais, Français)",
+        "coef_mod": 3.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "LE21": {
+            "nom": "Langue Anglaise",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 1.0,
+            "coef_elem": 2.0
+          },
+          "LE22": {
+            "nom": "Langue Française",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 1.0,
+            "coef_elem": 2.0
+          }
+        }
+      },
+      "PM21": {
+        "nom": "Electronique et Programmation orientée objet",
+        "coef_mod": 4.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PM211": {
+            "nom": "Electronique",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.75,
+            "coef_tp": 0.25,
+            "coef_elem": 2.0
+          },
+          "PM212": {
+            "nom": "Programmation orientée objet",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PM22": {
+        "nom": "Transmissions mécaniques",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PM221": {
+            "nom": "Transmissions mécaniques",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 0.6,
+            "coef_tp": 0.4,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PM23": {
+        "nom": "Matériaux industriels",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PM231": {
+            "nom": "Matériaux Métalliques",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          },
+          "PM232": {
+            "nom": "Plastiques et composites",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PS2": {
+        "nom": "Culture and Art Skills",
+        "coef_mod": 3.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PS21": {
+            "nom": "Arts",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          },
+          "PS22": {
+            "nom": "Culture",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          }
+        }
+      },
+      "TC21": {
+        "nom": "Modélisation statistique et recherche operationnelle",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "TC211": {
+            "nom": "Modélisation Statistique",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 2.0,
+            "coef_tp": 0.5,
+            "coef_elem": 2.5
+          },
+          "TC212": {
+            "nom": "Recherche Opérationnelle",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "TC23": {
+        "nom": "Mécanique des fluides et machines thermiques",
+        "coef_mod": 4.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "TC231": {
+            "nom": "Mécanique des fluides",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.5,
+            "coef_tp": 0.5,
+            "coef_elem": 2.0
+          },
+          "TC232": {
+            "nom": "Machines thermiques",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      }
+    }
+  },
+  "GM-IMS": {
+    "nom_complet": "GM-IMS",
+    "modules": {
+      "LE2": {
+        "nom": "Langues Etrangères (Anglais, Français)",
+        "coef_mod": 3.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "LE21": {
+            "nom": "Langue Anglaise",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 1.0,
+            "coef_elem": 2.0
+          },
+          "LE22": {
+            "nom": "Langue Française",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 1.0,
+            "coef_elem": 2.0
+          }
+        }
+      },
+      "PM21": {
+        "nom": "Electronique et Programmation orientée objet",
+        "coef_mod": 4.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PM211": {
+            "nom": "Electronique",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.75,
+            "coef_tp": 0.25,
+            "coef_elem": 2.0
+          },
+          "PM212": {
+            "nom": "Programmation orientée objet",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PM22": {
+        "nom": "Transmissions mécaniques",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PM221": {
+            "nom": "Transmissions mécaniques",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 0.6,
+            "coef_tp": 0.4,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PM23": {
+        "nom": "Matériaux industriels",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PM231": {
+            "nom": "Matériaux Métalliques",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          },
+          "PM232": {
+            "nom": "Plastiques et composites",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PS2": {
+        "nom": "Culture and Art Skills",
+        "coef_mod": 3.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PS21": {
+            "nom": "Arts",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          },
+          "PS22": {
+            "nom": "Culture",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          }
+        }
+      },
+      "TC21": {
+        "nom": "Modélisation statistique et recherche operationnelle",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "TC211": {
+            "nom": "Modélisation Statistique",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 2.0,
+            "coef_tp": 0.5,
+            "coef_elem": 2.5
+          },
+          "TC212": {
+            "nom": "Recherche Opérationnelle",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "TC23": {
+        "nom": "Mécanique des fluides et machines thermiques",
+        "coef_mod": 4.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "TC231": {
+            "nom": "Mécanique des fluides",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.5,
+            "coef_tp": 0.5,
+            "coef_elem": 2.0
+          },
+          "TC232": {
+            "nom": "Machines thermiques",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      }
+    }
+  },
+  "GM-MPF": {
+    "nom_complet": "GM-MPF",
+    "modules": {
+      "LE2": {
+        "nom": "Langues Etrangères (Anglais, Français)",
+        "coef_mod": 3.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "LE21": {
+            "nom": "Langue Anglaise",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 1.0,
+            "coef_elem": 2.0
+          },
+          "LE22": {
+            "nom": "Langue Française",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 1.0,
+            "coef_elem": 2.0
+          }
+        }
+      },
+      "PM21": {
+        "nom": "Electronique et Programmation orientée objet",
+        "coef_mod": 4.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PM211": {
+            "nom": "Electronique",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.75,
+            "coef_tp": 0.25,
+            "coef_elem": 2.0
+          },
+          "PM212": {
+            "nom": "Programmation orientée objet",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PM22": {
+        "nom": "Transmissions mécaniques",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PM221": {
+            "nom": "Transmissions mécaniques",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 0.6,
+            "coef_tp": 0.4,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PM23": {
+        "nom": "Matériaux industriels",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PM231": {
+            "nom": "Matériaux Métalliques",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          },
+          "PM232": {
+            "nom": "Plastiques et composites",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PS2": {
+        "nom": "Culture and Art Skills",
+        "coef_mod": 3.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PS21": {
+            "nom": "Arts",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          },
+          "PS22": {
+            "nom": "Culture",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          }
+        }
+      },
+      "TC21": {
+        "nom": "Modélisation statistique et recherche operationnelle",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "TC211": {
+            "nom": "Modélisation Statistique",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 2.0,
+            "coef_tp": 0.5,
+            "coef_elem": 2.5
+          },
+          "TC212": {
+            "nom": "Recherche Opérationnelle",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "TC23": {
+        "nom": "Mécanique des fluides et machines thermiques",
+        "coef_mod": 4.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "TC231": {
+            "nom": "Mécanique des fluides",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.5,
+            "coef_tp": 0.5,
+            "coef_elem": 2.0
+          },
+          "TC232": {
+            "nom": "Machines thermiques",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      }
+    }
+  },
+  "GME24": {
+    "nom_complet": "GME24",
+    "modules": {
+      "LE2": {
+        "nom": "Langues Etrangères (Anglais, Français)",
+        "coef_mod": 3.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "LE21": {
+            "nom": "Langue Anglaise",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 1.0,
+            "coef_elem": 2.0
+          },
+          "LE22": {
+            "nom": "Langue Française",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 1.0,
+            "coef_elem": 2.0
+          }
+        }
+      },
+      "PM21": {
+        "nom": "Electronique et Programmation orientée objet",
+        "coef_mod": 4.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PM211": {
+            "nom": "Electronique",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.75,
+            "coef_tp": 0.25,
+            "coef_elem": 2.0
+          },
+          "PM212": {
+            "nom": "Programmation orientée objet",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PM22": {
+        "nom": "Transmissions mécaniques",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PM221": {
+            "nom": "Transmissions mécaniques",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 0.6,
+            "coef_tp": 0.4,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PM23": {
+        "nom": "Matériaux industriels",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PM231": {
+            "nom": "Matériaux Métalliques",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          },
+          "PM232": {
+            "nom": "Plastiques et composites",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "PS2": {
+        "nom": "Culture and Art Skills",
+        "coef_mod": 3.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PS21": {
+            "nom": "Arts",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          },
+          "PS22": {
+            "nom": "Culture",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          }
+        }
+      },
+      "TC21": {
+        "nom": "Modélisation statistique et recherche operationnelle",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "TC211": {
+            "nom": "Modélisation Statistique",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 2.0,
+            "coef_tp": 0.5,
+            "coef_elem": 2.5
+          },
+          "TC212": {
+            "nom": "Recherche Opérationnelle",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "TC23": {
+        "nom": "Mécanique des fluides et machines thermiques",
+        "coef_mod": 4.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "TC231": {
+            "nom": "Mécanique des fluides",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.5,
+            "coef_tp": 0.5,
+            "coef_elem": 2.0
+          },
+          "TC232": {
+            "nom": "Machines thermiques",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      }
+    }
+  },
+  "IATD-SI": {
+    "nom_complet": "IATD-SI",
+    "modules": {
+      "IA21": {
+        "nom": "Techniques Avancées d'Apprentissage Automatique et Séries Chronologiques",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "IA211": {
+            "nom": "Advanced Machine Learning Techniques",
+            "coef_cc": 0.5,
+            "coef_ex": 0.5,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          },
+          "IA212": {
+            "nom": "Advanced Time Series Analysis and Neural",
+            "coef_cc": 0.5,
+            "coef_ex": 0.5,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "IA22": {
+        "nom": "Architecture Orientée Objet et Java Avancé",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "IA221": {
+            "nom": "Modélisation des Systèmes",
+            "coef_cc": 0.5,
+            "coef_ex": 0.5,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          },
+          "IA222": {
+            "nom": "Conception Orientée Objet",
+            "coef_cc": 0.5,
+            "coef_ex": 0.5,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          },
+          "IA223": {
+            "nom": "Java Expert",
+            "coef_cc": 0.5,
+            "coef_ex": 0.5,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "IA23": {
+        "nom": "Techniques d'IA pour la Vision Avancée et le Traitement du Langage Naturel",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "IA231": {
+            "nom": "Core Concepts and Techniques in Computer",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          },
+          "IA232": {
+            "nom": "Advanced Deep Learning for Computer Visi",
+            "coef_cc": 0.5,
+            "coef_ex": 0.5,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          },
+          "IA233": {
+            "nom": "Advanced Deep Learning for Natural Langu",
+            "coef_cc": 0.5,
+            "coef_ex": 0.5,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "IA24": {
+        "nom": "Modélisation Statistique et Recherche Opérationnelle pour Les Sciences de Données",
+        "coef_mod": 5.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "IA241": {
+            "nom": "Probabilité et Tests Statistiques pour D",
+            "coef_cc": 0.5,
+            "coef_ex": 0.5,
+            "coef_ecrit": 1.5,
+            "coef_tp": 0.0,
+            "coef_elem": 1.5
+          },
+          "IA242": {
+            "nom": "Recherche Opérationnelle",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      },
+      "LE2": {
+        "nom": "Langues Etrangères (Anglais, Français)",
+        "coef_mod": 3.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "LE21": {
+            "nom": "Langue Anglaise",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 1.0,
+            "coef_elem": 2.0
+          },
+          "LE22": {
+            "nom": "Langue Française",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 1.0,
+            "coef_elem": 2.0
+          }
+        }
+      },
+      "PS2": {
+        "nom": "Culture and Art Skills",
+        "coef_mod": 3.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "PS21": {
+            "nom": "Arts",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          },
+          "PS22": {
+            "nom": "Culture",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.5,
+            "coef_elem": 1.5
+          }
+        }
+      },
+      "TC23": {
+        "nom": "Mécanique des fluides et machines thermiques",
+        "coef_mod": 4.0,
+        "seuil": 12.0,
+        "eliminatoire": 8.0,
+        "elements": {
+          "TC231": {
+            "nom": "Mécanique des fluides",
+            "coef_cc": 0.3,
+            "coef_ex": 0.7,
+            "coef_ecrit": 1.5,
+            "coef_tp": 0.5,
+            "coef_elem": 2.0
+          },
+          "TC232": {
+            "nom": "Machines thermiques",
+            "coef_cc": 0.0,
+            "coef_ex": 1.0,
+            "coef_ecrit": 1.0,
+            "coef_tp": 0.0,
+            "coef_elem": 1.0
+          }
+        }
+      }
+    }
+  }
+}
