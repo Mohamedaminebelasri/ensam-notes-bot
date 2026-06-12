@@ -10,8 +10,8 @@ labels: bug
 **Quel message d'erreur exact ?**
 <!-- Colle le texte ici, ou joins une capture d'écran -->
 
-**Ta filière :**
-<!-- ex : IATD-SI, GE-DI, GM-CISM... -->
+**Ton niveau et ta filière :**
+<!-- ex : 3A / IATD-SI · 1A / API-MPT · 4A / GE-DI -->
 
 **Système :**
 <!-- Windows / Mac / Linux -->

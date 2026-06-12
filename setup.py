@@ -50,6 +50,7 @@ def _write_env(vals: dict):
         f"SCHOOL_PASSWORD={vals['SCHOOL_PASSWORD']}",
         f"TELEGRAM_TOKEN={vals['TELEGRAM_TOKEN']}",
         f"TELEGRAM_CHAT_ID={vals['TELEGRAM_CHAT_ID']}",
+        f"NIVEAU={vals['NIVEAU']}",
         f"FILIERE={vals['FILIERE']}",
         "",
     ]
@@ -111,18 +112,20 @@ def _send_test_telegram(token: str, chat_id: str) -> tuple[bool, str]:
         return False, str(e)
 
 
-# ─── liste filières ───────────────────────────────────────────────────────────
+# ─── liste niveaux / filières ─────────────────────────────────────────────────
 
-def _get_filieres() -> list[str]:
+_NIVEAUX = ["1A", "2A", "3A", "4A"]
+
+def _get_filieres(niveau: str) -> list[str]:
     try:
         sys.path.insert(0, str(_DIR))
         from filieres_database import FILIERES
-        return sorted(FILIERES.keys())
+        return sorted(FILIERES.get(niveau, {}).keys())
     except ImportError:
-        return [
-            "GC24", "GE-DI", "GE-MCI", "GI-ILSI", "GIEO",
-            "GIP24", "GM-CISM", "GM-IMS", "GM-MPF", "GME24", "IATD-SI",
-        ]
+        if niveau in ("3A", "4A"):
+            return ["GC24", "GE-DI", "GE-MCI", "GI-ILSI", "GIEO",
+                    "GIP24", "GM-CISM", "GM-IMS", "GM-MPF", "GME24", "IATD-SI"]
+        return ["API-MPT"]
 
 
 # ─── étapes ──────────────────────────────────────────────────────────────────
@@ -145,7 +148,7 @@ def step_welcome(existing: dict) -> bool:
 
 def step_school(existing: dict) -> tuple[str, str]:
     _sep()
-    _print("🏫  Étape 1/4 — Identifiants SchoolApp ENSAM")
+    _print("🏫  Étape 1/5 — Identifiants SchoolApp ENSAM")
     _print()
 
     while True:
@@ -168,7 +171,7 @@ def step_school(existing: dict) -> tuple[str, str]:
 
 def step_telegram_token(existing: dict) -> str:
     _sep()
-    _print("🤖  Étape 2/4 — Token du bot Telegram")
+    _print("🤖  Étape 2/5 — Token du bot Telegram")
     _print()
     _print("   Pas encore de bot Telegram ?")
     _print("   1. Ouvre Telegram, cherche @BotFather")
@@ -187,7 +190,7 @@ def step_telegram_token(existing: dict) -> str:
 
 def step_telegram_chat(existing: dict, token: str) -> str:
     _sep()
-    _print("💬  Étape 3/4 — Chat ID Telegram")
+    _print("💬  Étape 3/5 — Chat ID Telegram")
     _print()
     _print("   📱 Maintenant, ouvre Telegram, cherche ton bot")
     _print("      (que tu viens de créer), et envoie-lui n'importe")
@@ -221,16 +224,47 @@ def step_telegram_chat(existing: dict, token: str) -> str:
     raise SystemExit(1)
 
 
-def step_filiere(existing: dict) -> str:
+def step_niveau(existing: dict) -> str:
     _sep()
-    _print("🎓  Étape 4/4 — Choix de ta filière (3ème Année, S2)")
+    _print("🎓  Étape 4/5 — Ton niveau d'études")
     _print()
-    filieres = _get_filieres()
+    labels = {"1A": "1ère Année", "2A": "2ème Année", "3A": "3ème Année", "4A": "4ème Année"}
+    for i, niv in enumerate(_NIVEAUX, 1):
+        marker = " ◀ actuel" if niv == existing.get("NIVEAU") else ""
+        _print(f"   {i}. {niv}  ({labels[niv]}){marker}")
+    _print()
+
+    while True:
+        rep = input("   Ton choix (1-4) : ").strip()
+        try:
+            idx = int(rep) - 1
+            if 0 <= idx < len(_NIVEAUX):
+                chosen = _NIVEAUX[idx]
+                _ok(f"Niveau sélectionné : {chosen}")
+                return chosen
+        except ValueError:
+            pass
+        _err("Entre 1, 2, 3 ou 4.")
+
+
+def step_filiere(existing: dict, niveau: str) -> str:
+    _sep()
+    _print("🗂️   Étape 5/5 — Choix de ta filière")
+    _print()
+
+    filieres = _get_filieres(niveau)
+
+    # 1A et 2A : une seule filière, sélection automatique
+    if len(filieres) == 1:
+        chosen = filieres[0]
+        _ok(f"Filière sélectionnée automatiquement : {chosen} (seule disponible pour {niveau})")
+        return chosen
+
     for i, code in enumerate(filieres, 1):
         marker = " ◀ actuelle" if code == existing.get("FILIERE") else ""
         _print(f"   {i:2d}. {code}{marker}")
     _print()
-    _print("   Pas sûr ? Va sur SchoolApp > Plan Etudes > 3ème Année")
+    _print(f"   Pas sûr ? Va sur SchoolApp > Plan Etudes > {niveau}")
     _print("   > 2ème Semestre et compare les codes modules avec 'Mes Notes'.")
     _print()
 
@@ -253,7 +287,7 @@ def step_write_env(vals: dict):
     _ok(f"Fichier .env écrit : {ENV_FILE}")
 
 
-def step_final(filiere: str):
+def step_final(niveau: str, filiere: str):
     _print()
     _print("=" * 55)
     _ok("Configuration terminée et testée !")
@@ -262,7 +296,7 @@ def step_final(filiere: str):
     _print("     python main.py --once   (premier test)")
     _print("     python main.py          (surveillance continue)")
     _print()
-    _print(f"   Filière configurée : {filiere}")
+    _print(f"   Niveau : {niveau}   Filière : {filiere}")
     _print("=" * 55)
     _print()
 
@@ -278,17 +312,19 @@ def main():
     email, password = step_school(existing)
     token           = step_telegram_token(existing)
     chat_id         = step_telegram_chat(existing, token)
-    filiere         = step_filiere(existing)
+    niveau          = step_niveau(existing)
+    filiere         = step_filiere(existing, niveau)
 
     step_write_env({
         "SCHOOL_EMAIL":    email,
         "SCHOOL_PASSWORD": password,
         "TELEGRAM_TOKEN":  token,
         "TELEGRAM_CHAT_ID": chat_id,
+        "NIVEAU":          niveau,
         "FILIERE":         filiere,
     })
 
-    step_final(filiere)
+    step_final(niveau, filiere)
 
 
 if __name__ == "__main__":

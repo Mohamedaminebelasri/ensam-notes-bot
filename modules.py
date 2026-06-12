@@ -99,27 +99,31 @@ _MODULES_IATD_SI = {
 
 
 def _load_modules():
+    niveau  = _os.getenv("NIVEAU",  "3A")
     filiere = _os.getenv("FILIERE", "IATD-SI")
     try:
         from filieres_database import FILIERES
-        known = sorted(FILIERES.keys())
-        if filiere not in FILIERES:
-            print(f"❌ Filière '{filiere}' inconnue.", flush=True)
-            print(f"   Filières disponibles : {known}", flush=True)
+        if niveau not in FILIERES:
+            print(f"❌ Niveau '{niveau}' inconnu. Niveaux disponibles : {sorted(FILIERES.keys())}", flush=True)
             raise SystemExit(1)
-        mods = FILIERES[filiere]["modules"]
-        print(f"[MODULES] Filière chargée : {filiere} ({len(mods)} modules)", flush=True)
+        if filiere not in FILIERES[niveau]:
+            filieres_ok = sorted(FILIERES[niveau].keys())
+            print(f"❌ Filière '{filiere}' inconnue pour le niveau {niveau}.", flush=True)
+            print(f"   Filières disponibles : {filieres_ok}", flush=True)
+            raise SystemExit(1)
+        mods = FILIERES[niveau][filiere]["modules"]
+        print(f"[MODULES] {niveau}/{filiere} chargé ({len(mods)} modules)", flush=True)
         return mods
     except ImportError:
-        if filiere != "IATD-SI":
-            print(
-                f"❌ filieres_database.py introuvable et filière demandée '{filiere}' ≠ IATD-SI.\n"
-                f"   Lance explore_coefficients.py pour générer la base de données.",
-                flush=True,
-            )
-            raise SystemExit(1)
-        print("[MODULES] filieres_database.py absent — fallback IATD-SI (données intégrées)", flush=True)
-        return _MODULES_IATD_SI
+        if niveau == "3A" and filiere == "IATD-SI":
+            print("[MODULES] filieres_database.py absent — fallback 3A/IATD-SI (données intégrées)", flush=True)
+            return _MODULES_IATD_SI
+        print(
+            f"❌ filieres_database.py introuvable et {niveau}/{filiere} ≠ 3A/IATD-SI.\n"
+            f"   Ce fichier est requis pour tous les niveaux sauf 3A/IATD-SI.",
+            flush=True,
+        )
+        raise SystemExit(1)
 
 
 MODULES = _load_modules()

@@ -80,24 +80,27 @@ Au premier lancement, `lancer.bat` va automatiquement :
 
 ### ⚙️ Configuration (assistant interactif)
 
-Ensuite, `setup.py` se lance automatiquement et te guide en 4 étapes :
+Ensuite, `setup.py` se lance automatiquement et te guide en 5 étapes :
 
-**Étape 1/4 — Identifiants SchoolApp**
+**Étape 1/5 — Identifiants SchoolApp**
 - Entre ton email et mot de passe SchoolApp
 - *(Le mot de passe s'affiche à l'écran — assure-toi d'être seul)*
 - Le bot teste la connexion immédiatement
 
-**Étape 2/4 — Token du bot Telegram**
+**Étape 2/5 — Token du bot Telegram**
 - Colle le token copié à l'Étape 2
 
-**Étape 3/4 — Chat ID (détection automatique)**
+**Étape 3/5 — Chat ID (détection automatique)**
 - Le bot détecte automatiquement ton ID Telegram
 - Il te demande simplement d'appuyer sur Entrée *(tu dois avoir envoyé "salut" à ton bot à l'Étape 2)*
 - Ton ID est récupéré depuis l'API Telegram — aucune saisie manuelle
 
-**Étape 4/4 — Choix de ta filière**
-- Une liste numérotée de 1 à 11 s'affiche
-- Entre le numéro correspondant à ta filière (3ème Année, S2)
+**Étape 4/5 — Choix de ton niveau**
+- Entre 1 (1A), 2 (2A), 3 (3A) ou 4 (4A)
+
+**Étape 5/5 — Choix de ta filière**
+- Pour **1A et 2A** : filière `API-MPT` sélectionnée automatiquement (seule disponible)
+- Pour **3A et 4A** : une liste numérotée de 1 à 11 s'affiche
 
 ---
 
@@ -203,15 +206,16 @@ Une autre instance du bot tourne déjà avec ce token (ex : une fenêtre `lancer
 Ces avertissements sont **normaux** et sans impact — les dépendances sont bien installées. Ignore-les.
 
 ### ❓ Comment trouver ma filière exacte ?
-Sur SchoolApp : **"Plan Etudes"** → **3ème Année** → **2ème Semestre**
+Sur SchoolApp : **"Plan Etudes"** → ton année → **2ème Semestre**
 Compare les codes de modules affichés (ex : `IA21`, `IA22`…) avec ceux dans **"Mes Notes"** — ils correspondent à une filière dans la liste.
 
-### ❓ Le bot affiche "Filière inconnue"
-Le fichier `.env` contient une valeur incorrecte pour `FILIERE=`.
+### ❓ Le bot affiche "Filière inconnue" ou "Niveau inconnu"
+Le fichier `.env` contient une valeur incorrecte pour `NIVEAU=` ou `FILIERE=`.
 - Supprime `.env` et relance `lancer.bat` pour reconfigurer
-- La filière doit être l'un des 11 codes exacts : `GC24`, `GE-DI`, `GE-MCI`, `GI-ILSI`, `GIEO`, `GIP24`, `GM-CISM`, `GM-IMS`, `GM-MPF`, `GME24`, `IATD-SI`
+- **1A / 2A** → filière `API-MPT` (sélectionnée automatiquement)
+- **3A / 4A** → filière parmi : `GC24`, `GE-DI`, `GE-MCI`, `GI-ILSI`, `GIEO`, `GIP24`, `GM-CISM`, `GM-IMS`, `GM-MPF`, `GME24`, `IATD-SI`
 
-### ❓ Je veux changer de filière ou mettre à jour mes identifiants
+### ❓ Je veux changer de filière, de niveau ou mettre à jour mes identifiants
 - Supprime le fichier `.env` dans le dossier du projet
 - Relance `lancer.bat` (Windows) ou `./lancer.sh` (Mac/Linux) — la configuration repart depuis le début
 

@@ -31,18 +31,18 @@ Surveille tes notes sur SchoolApp ENSAM-UMI et te notifie instantanément sur Te
 - 📡 **`/status`** — état du bot et heure de la dernière vérification
 - 🔄 **Reconnexion automatique** si la session SchoolApp expire
 - 💾 **Backup automatique** des données à chaque vérification
-- 🎓 **11 filières** de 3ème Année S2 supportées
+- 🎓 **1A, 2A, 3A, 4A** — toutes les années du cycle ingénieur supportées (S2)
 
 ---
 
-## 🎓 Filières supportées (3ème Année, Semestre 2)
+## 🎓 Niveaux et filières supportés (Semestre 2)
 
-| Code | | Code | | Code |
-|---|---|---|---|---|
-| GC24 | | GE-DI | | GE-MCI |
-| GI-ILSI | | GIEO | | GIP24 |
-| GM-CISM | | GM-IMS | | GM-MPF |
-| GME24 | | IATD-SI | | |
+| Niveau | Filières |
+|---|---|
+| **1A** | API-MPT |
+| **2A** | API-MPT |
+| **3A** | GC24 · GE-DI · GE-MCI · GI-ILSI · GIEO · GIP24 · GM-CISM · GM-IMS · GM-MPF · GME24 · IATD-SI |
+| **4A** | GC24 · GE-DI · GE-MCI · GI-ILSI · GIEO · GIP24 · GM-CISM · GM-IMS · GM-MPF · GME24 · IATD-SI |
 
 ---
 
@@ -69,8 +69,8 @@ Voir **[INSTALLATION.md](INSTALLATION.md)** — guide pas à pas sans connaissan
 | `comparator.py` | Détection des changements entre deux relevés |
 | `calculator.py` | Calcul des moyennes et du minimum requis |
 | `notifier.py` | Formatage et envoi des messages Telegram |
-| `modules.py` | Chargement dynamique des coefficients selon la filière |
-| `filieres_database.py` | Base de données des coefficients — 11 filières, générée par scraping |
+| `modules.py` | Chargement dynamique des coefficients selon le niveau et la filière |
+| `filieres_database.py` | Base de données des coefficients — 1A/2A/3A/4A, générée par scraping |
 | `sim_handler.py` | Logique de la commande `/sim` |
 | `telegram_bot.py` | Gestion des commandes Telegram (`/bilan`, `/sim`, `/status`) |
 
