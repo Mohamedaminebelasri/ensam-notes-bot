@@ -241,4 +241,25 @@ Le bot génère un fichier `crash.log` dans son dossier dès qu'une erreur inatt
 
 ---
 
+## 🛠️ Développeurs / mode avancé
+
+### Mode démo (`--demo`)
+
+> **Note pour les contributeurs et testeurs** — cette section ne concerne pas les étudiants qui utilisent le bot pour leurs vraies notes.
+
+Pour tester le mode démo (`python setup.py --demo`), utilise **TOUJOURS** un dossier **ET** un bot Telegram séparés de ta configuration réelle, pour éviter tout conflit ou écrasement.
+
+**Pourquoi ?**
+- `setup.py --demo` écrase le fichier `.env` et `notes.json` du dossier courant
+- Si tu utilises le même bot Telegram que ta vraie config, les messages de démo se mélangent avec les vraies notifications
+- En cas de fausse manip, tu pourrais écraser tes identifiants réels ou tes notes sauvegardées
+
+**Procédure recommandée :**
+1. Copie le projet dans un dossier séparé (ex : `ensam-notes-bot-demo/`)
+2. Crée un second bot Telegram via @BotFather (`/newbot`) dédié à la démo
+3. Lance `python setup.py --demo` dans le dossier copié avec le bot dédié
+4. Ne jamais lancer `setup.py --demo` dans le dossier de ta vraie config
+
+---
+
 *Problème non listé ? Ouvre une [Issue sur GitHub](https://github.com/Mohamedaminebelasri/ensam-notes-bot/issues) en précisant ta filière, l'étape concernée et le message d'erreur exact.*

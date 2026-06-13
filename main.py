@@ -273,9 +273,6 @@ def main():
         run_test_min(); return
     if "--test" in sys.argv:
         run_all_tests(); return
-    if "--once" in sys.argv:
-        check_notes(); return
-
     if os.getenv("DEMO_MODE") == "true":
         log("🎬 MODE DÉMO — données fictives, aucune vraie connexion SchoolApp")
         started_at = datetime.now(_MAROC)
@@ -318,6 +315,9 @@ def main():
             raise
         log("Bot arrêté (mode démo)")
         return
+
+    if "--once" in sys.argv:
+        check_notes(); return
 
     _setup_crash_handler()
 
