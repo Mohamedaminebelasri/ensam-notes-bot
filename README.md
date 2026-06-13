@@ -4,12 +4,6 @@ Surveille tes notes sur SchoolApp ENSAM-UMI et te notifie instantanément sur Te
 
 ---
 
-## ⚠️ Avertissement important
-
-- Projet **étudiant NON-OFFICIEL**, créé par un étudiant pour les étudiants de l'ENSAM Meknès
-- **Pas affilié** à l'ENSAM ni à l'Université Moulay Ismail
-- Accès en **lecture seule** à tes notes (aucune modification possible)
-- **Open source** — le code est 100 % visible et vérifiable sur cette page
 
 ---
 
@@ -92,6 +86,6 @@ MIT — voir [LICENSE](LICENSE)
 
 ## 🙏 Contact
 
-Créé par **Mohamed Amine Belasri** — ENSAM Meknès, promotion 2024–2027
+Créé par **Mohamed Amine Belasri** — ENSAM Meknès, promotion 2023–2028
 
 Pour toute question ou demande d'aide à l'installation, contacte-moi directement.
