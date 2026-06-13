@@ -10,6 +10,7 @@ import requests as _http
 from scraper import get_notes
 from comparator import load_saved_notes, save_notes, find_changes
 from notifier import notify_changes, send_telegram
+from modules import MODULES
 
 load_dotenv()
 
@@ -143,9 +144,28 @@ def check_notes():
         old        = load_saved_notes()
 
         if not old:
-            log("Premier lancement — sauvegarde de l'état initial (aucune notification)")
+            niveau  = os.getenv("NIVEAU",  "3A")
+            filiere = os.getenv("FILIERE", "IATD-SI")
+            total   = sum(len(m["elements"]) for m in MODULES.values())
+            send_telegram(
+                f"👋 <b>Bienvenue ! Ton bot ENSAM Notes est actif.</b>\n\n"
+                f"🔔 Je surveille tes notes sur SchoolApp et je te\n"
+                f"   notifie automatiquement dès qu'une note est\n"
+                f"   publiée (vérification toutes les 5 min)\n"
+                f"🧮 Pour chaque note, je calcule le minimum requis\n"
+                f"   pour valider le module\n\n"
+                f"📋 <b>Mes commandes :</b>\n"
+                f"📊 /bilan — résumé complet de tes notes actuelles\n"
+                f"🔵 /sim — simule des notes virtuelles\n"
+                f"👀 /simaffichage — voir un exemple de notification\n"
+                f"📡 /status — état du bot\n"
+                f"hey / /help — cette liste de commandes\n\n"
+                f"🎓 Configuration : {niveau} — {filiere}\n"
+                f"📚 {total} éléments surveillés\n\n"
+                f"À bientôt ! 🚀"
+            )
             save_notes(notes_list)
-            log(f"État initial sauvegardé : {len(notes_list)} éléments")
+            log(f"Premier lancement — message d'accueil envoyé, {len(notes_list)} éléments sauvegardés")
             return
 
         changes = find_changes(old, notes_list)

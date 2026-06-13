@@ -47,6 +47,8 @@ _HELP_MSG = (
     "   Simulateur de notes — teste des notes\n"
     "   virtuelles et vois ce qu'il te faut\n"
     "   pour valider chaque module\n\n"
+    "👀 /simaffichage\n"
+    "   Voir un exemple de notification (données fictives)\n\n"
     "📡 /status\n"
     "   État du bot — dernière vérification,\n"
     "   connexion ENSAM, uptime\n\n"
@@ -156,14 +158,48 @@ async def cmd_bilan(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(msg, parse_mode="HTML")
 
 
+async def cmd_simaffichage(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    from notifier import _build_message
+
+    mod_code  = next(iter(MODULES))
+    mod_info  = MODULES[mod_code]
+    elem_code = next(iter(mod_info["elements"]))
+    elem_info = mod_info["elements"][elem_code]
+
+    if elem_info["coef_cc"] > 0:
+        note_type = "cc"
+    elif elem_info["coef_ex"] > 0:
+        note_type = "ex"
+    else:
+        note_type = "tp"
+
+    notes_dict = {
+        code: {"cc": None, "ex": None, "tp": None, "rat": None,
+               "moy_so": None, "moy_sr": None, "decision": None}
+        for code in mod_info["elements"]
+    }
+    notes_dict[elem_code][note_type] = 15.0
+
+    changes = [{"code": elem_code, "type": note_type, "ancienne": None, "nouvelle": 15.0}]
+    body    = _build_message(elem_code, changes, notes_dict)
+
+    prefix = (
+        "📌 <b>EXEMPLE (donnée fictive)</b> — voici à quoi\n"
+        "ressemblera une vraie notification :\n\n"
+        "⬇️⬇️⬇️\n\n"
+    )
+    await update.message.reply_text(prefix + body, parse_mode="HTML")
+
+
 def build_application() -> Application:
     return Application.builder().token(TOKEN).build()
 
 
 def setup_handlers(app: Application):
-    app.add_handler(CommandHandler("hy",     cmd_hy))
-    app.add_handler(CommandHandler("help",   cmd_help))
-    app.add_handler(CommandHandler("status", cmd_status))
-    app.add_handler(CommandHandler("bilan",  cmd_bilan))
+    app.add_handler(CommandHandler("hy",           cmd_hy))
+    app.add_handler(CommandHandler("help",         cmd_help))
+    app.add_handler(CommandHandler("status",       cmd_status))
+    app.add_handler(CommandHandler("bilan",        cmd_bilan))
+    app.add_handler(CommandHandler("simaffichage", cmd_simaffichage))
     app.add_handler(build_sim_handler())
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, msg_greet))
