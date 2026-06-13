@@ -146,7 +146,7 @@ def step_welcome(existing: dict) -> bool:
     return True
 
 
-def step_school(existing: dict) -> tuple[str, str]:
+def step_school(existing: dict, demo: bool = False) -> tuple[str, str]:
     _sep()
     _print("🏫  Étape 1/5 — Identifiants SchoolApp ENSAM")
     _print()
@@ -159,6 +159,10 @@ def step_school(existing: dict) -> tuple[str, str]:
         print("   ⚠️  Ton mot de passe sera visible à l'écran —")
         print("       assure-toi d'être seul devant ton PC.")
         password = input("   Mot de passe : ")
+
+        if demo:
+            _ok("Connexion réussie (mode démo)")
+            return email, password
 
         _print("   Vérification de la connexion...")
         ok, reason = _test_login(email, password)
@@ -287,7 +291,7 @@ def step_write_env(vals: dict):
     _ok(f"Fichier .env écrit : {ENV_FILE}")
 
 
-def step_final(niveau: str, filiere: str):
+def step_final(niveau: str, filiere: str, demo: bool = False):
     _print()
     _print("=" * 55)
     _ok("Configuration terminée et testée !")
@@ -298,18 +302,36 @@ def step_final(niveau: str, filiere: str):
     _print()
     _print(f"   Niveau : {niveau}   Filière : {filiere}")
     _print("=" * 55)
+    if demo:
+        _print()
+        _warn(
+            "Configuration sauvegardée avec des identifiants\n"
+            "   FICTIFS. Pour utiliser le bot pour de vrai, relance\n"
+            "   'python setup.py' (sans --demo) avec tes VRAIS\n"
+            "   identifiants SchoolApp."
+        )
     _print()
 
 
 # ─── main ─────────────────────────────────────────────────────────────────────
 
 def main():
+    demo = "--demo" in sys.argv
+
+    if demo:
+        _print()
+        _print("🎬 MODE DÉMO ACTIVÉ")
+        _print("   La vérification de connexion SchoolApp sera")
+        _print("   SAUTÉE — utilise des identifiants fictifs pour")
+        _print("   ta démonstration.")
+        _print()
+
     existing = _read_env()
 
     if not step_welcome(existing):
         return
 
-    email, password = step_school(existing)
+    email, password = step_school(existing, demo=demo)
     token           = step_telegram_token(existing)
     chat_id         = step_telegram_chat(existing, token)
     niveau          = step_niveau(existing)
@@ -324,7 +346,7 @@ def main():
         "FILIERE":         filiere,
     })
 
-    step_final(niveau, filiere)
+    step_final(niveau, filiere, demo=demo)
 
 
 if __name__ == "__main__":
