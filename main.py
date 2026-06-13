@@ -276,6 +276,49 @@ def main():
     if "--once" in sys.argv:
         check_notes(); return
 
+    if os.getenv("DEMO_MODE") == "true":
+        log("🎬 MODE DÉMO — données fictives, aucune vraie connexion SchoolApp")
+        started_at = datetime.now(_MAROC)
+        with open(_HEARTBEAT_FILE, "w") as f:
+            json.dump({
+                "started_at":     started_at.strftime('%d/%m/%Y à %H:%M'),
+                "started_at_iso": started_at.isoformat(),
+                "last_check":     "Mode démo",
+                "last_check_iso": None,
+            }, f)
+        from telegram_bot import build_application, setup_handlers
+        niveau  = os.getenv("NIVEAU",  "3A")
+        filiere = os.getenv("FILIERE", "IATD-SI")
+        total   = sum(len(m["elements"]) for m in MODULES.values())
+        send_telegram(
+            f"🎬 <b>Mode démo actif</b> — toutes les notes affichées\n"
+            f"sont fictives, à des fins de démonstration.\n\n"
+            f"📋 <b>Mes commandes :</b>\n"
+            f"📊 /bilan — résumé de tes notes (fictives)\n"
+            f"🔵 /sim — simulateur de notes\n"
+            f"👀 /simaffichage — exemple de notification\n"
+            f"📡 /status — état du bot\n\n"
+            f"🎓 Configuration : {niveau} — {filiere}\n"
+            f"📚 {total} éléments surveillés (données fictives)"
+        )
+        app = build_application()
+        setup_handlers(app)
+        log("Telegram bot actif en mode démo — Ctrl+C pour arrêter")
+        try:
+            app.run_polling()
+        except KeyboardInterrupt:
+            pass
+        except Exception as e:
+            _logger.exception("CRASH FATAL — run_polling() s'est arrêté")
+            _send_alert(
+                f"💀 <b>Bot ENSAM — Telegram polling crashé !</b>\n"
+                f"<code>{type(e).__name__}: {e}</code>\n\n"
+                f"⏰ {_now_str()}"
+            )
+            raise
+        log("Bot arrêté (mode démo)")
+        return
+
     _setup_crash_handler()
 
     started_at = datetime.now(_MAROC)

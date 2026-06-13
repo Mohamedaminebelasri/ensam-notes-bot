@@ -52,9 +52,60 @@ def _write_env(vals: dict):
         f"TELEGRAM_CHAT_ID={vals['TELEGRAM_CHAT_ID']}",
         f"NIVEAU={vals['NIVEAU']}",
         f"FILIERE={vals['FILIERE']}",
-        "",
     ]
+    if vals.get("DEMO_MODE"):
+        lines.append(f"DEMO_MODE={vals['DEMO_MODE']}")
+    lines.append("")
     ENV_FILE.write_text("\n".join(lines), encoding="utf-8")
+
+
+def _generate_demo_notes(niveau: str, filiere: str) -> dict:
+    """Génère des notes fictives réalistes et variées pour la démo."""
+    import random
+    rng  = random.Random(42)
+    pool = [10.5, 11.0, 11.5, 12.0, 12.25, 13.0, 13.5, 14.0, 14.5,
+            15.0, 15.25, 15.5, 16.0, 16.5, 17.0, 17.5, 18.0]
+    try:
+        sys.path.insert(0, str(_DIR))
+        from filieres_database import FILIERES
+        modules = FILIERES[niveau][filiere]["modules"]
+    except (ImportError, KeyError):
+        return {}
+    mod_list = list(modules.items())
+    notes    = {}
+    for i, (mod_code, mod_info) in enumerate(mod_list):
+        is_complete = (i == 0)
+        is_empty    = (i == len(mod_list) - 1) and len(mod_list) > 1
+        for elem_code, ei in mod_info["elements"].items():
+            cc = ex = tp = None
+            if not is_empty:
+                if is_complete or rng.random() < 0.6:
+                    if ei["coef_cc"] > 0: cc = rng.choice(pool)
+                    if ei["coef_ex"] > 0: ex = rng.choice(pool)
+                    if ei["coef_tp"] > 0: tp = rng.choice(pool)
+                else:
+                    if ei["coef_cc"] > 0:
+                        cc = rng.choice(pool)
+                    elif ei["coef_ex"] > 0:
+                        ex = rng.choice(pool)
+            notes[elem_code] = {
+                "cc": cc, "ex": ex, "tp": tp,
+                "rat": None, "moy_so": None, "moy_sr": None, "decision": None,
+            }
+    return notes
+
+
+def step_demo_notes(niveau: str, filiere: str):
+    import json as _json
+    _sep()
+    _print("🎬  Génération des notes fictives pour la démo...")
+    notes = _generate_demo_notes(niveau, filiere)
+    if not notes:
+        _warn("Impossible de générer les notes fictives (filieres_database.py introuvable)")
+        return
+    notes_file = _DIR / "notes.json"
+    notes_file.write_text(_json.dumps(notes, ensure_ascii=False, indent=2), encoding="utf-8")
+    _ok(f"notes.json généré — {len(notes)} éléments fictifs")
 
 
 # ─── test connexion SchoolApp ─────────────────────────────────────────────────
@@ -337,14 +388,21 @@ def main():
     niveau          = step_niveau(existing)
     filiere         = step_filiere(existing, niveau)
 
-    step_write_env({
+    vals = {
         "SCHOOL_EMAIL":    email,
         "SCHOOL_PASSWORD": password,
         "TELEGRAM_TOKEN":  token,
         "TELEGRAM_CHAT_ID": chat_id,
         "NIVEAU":          niveau,
         "FILIERE":         filiere,
-    })
+    }
+    if demo:
+        vals["DEMO_MODE"] = "true"
+
+    step_write_env(vals)
+
+    if demo:
+        step_demo_notes(niveau, filiere)
 
     step_final(niveau, filiere, demo=demo)
 

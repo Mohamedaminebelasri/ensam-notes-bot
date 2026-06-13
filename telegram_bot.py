@@ -103,6 +103,11 @@ async def cmd_status(update: Update, context: ContextTypes.DEFAULT_TYPE):
     filiere = os.getenv("FILIERE", "IATD-SI")
     total_elements = sum(len(m["elements"]) for m in MODULES.values())
 
+    connexion_line = (
+        "🎬 Mode démo — données fictives"
+        if os.getenv("DEMO_MODE") == "true"
+        else "✅ Connexion ENSAM : OK"
+    )
     msg = (
         "🟢 <b>Bot actif</b>\n\n"
         f"⏰ Dernière vérification : {last_check_str} (il y a {minutes_ago} min)\n"
@@ -110,25 +115,31 @@ async def cmd_status(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"📊 {total_elements} éléments surveillés\n"
         f"🎓 Configuration : {niveau} — {filiere}\n"
         "🖥️ Bot en cours d'exécution\n"
-        "✅ Connexion ENSAM : OK"
+        f"{connexion_line}"
     )
     await update.message.reply_text(msg, parse_mode="HTML")
 
 
 async def cmd_bilan(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print(f"[BILAN] Commande reçue de {update.effective_user.username or update.effective_user.id}", flush=True)
-    await update.message.reply_text("⏳ Récupération des notes en cours...")
 
-    loop       = asyncio.get_running_loop()
-    notes_list = await loop.run_in_executor(None, get_notes)
-
-    if not notes_list:
-        await update.message.reply_text("❌ Erreur connexion")
-        return
-
-    notes_dict = _build_notes_dict(notes_list)
-
-    print(f"[BILAN] {len(notes_list)} éléments récupérés — envoi des tableaux", flush=True)
+    if os.getenv("DEMO_MODE") == "true":
+        await update.message.reply_text("📂 Chargement des notes (mode démo)...")
+        from comparator import load_saved_notes
+        notes_dict = load_saved_notes()
+        if not notes_dict:
+            await update.message.reply_text("❌ Aucune donnée de démo trouvée.")
+            return
+        print(f"[BILAN] Mode démo — {len(notes_dict)} éléments chargés depuis notes.json", flush=True)
+    else:
+        await update.message.reply_text("⏳ Récupération des notes en cours...")
+        loop       = asyncio.get_running_loop()
+        notes_list = await loop.run_in_executor(None, get_notes)
+        if not notes_list:
+            await update.message.reply_text("❌ Erreur connexion")
+            return
+        notes_dict = _build_notes_dict(notes_list)
+        print(f"[BILAN] {len(notes_list)} éléments récupérés — envoi des tableaux", flush=True)
     for mod_code, mod_info in MODULES.items():
         result = calc_minimum_restant(notes_dict, mod_code)
 

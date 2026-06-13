@@ -1,6 +1,7 @@
 """ConversationHandler Telegram pour /sim — simulation de notes."""
 
 import asyncio
+import os
 import warnings
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.warnings import PTBUserWarning
@@ -307,20 +308,32 @@ async def confirm_more(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await query.edit_message_text("⏳ Calcul en cours...")
 
-    loop = asyncio.get_running_loop()
-    notes_list = await loop.run_in_executor(None, get_notes)
-
-    if not notes_list:
-        await query.edit_message_text("❌ Impossible de récupérer les notes réelles.")
-        return ConversationHandler.END
-
-    real_notes = {
-        n["code"]: {
-            "cc": n.get("cc"), "ex": n.get("ex"), "tp": n.get("tp"),
-            "moy_sr": n.get("moy_sr"), "decision": n.get("decision"),
+    if os.getenv("DEMO_MODE") == "true":
+        from comparator import load_saved_notes
+        saved = load_saved_notes()
+        if not saved:
+            await query.edit_message_text("❌ Aucune donnée de démo trouvée.")
+            return ConversationHandler.END
+        real_notes = {
+            code: {
+                "cc": d.get("cc"), "ex": d.get("ex"), "tp": d.get("tp"),
+                "moy_sr": d.get("moy_sr"), "decision": d.get("decision"),
+            }
+            for code, d in saved.items()
         }
-        for n in notes_list
-    }
+    else:
+        loop = asyncio.get_running_loop()
+        notes_list = await loop.run_in_executor(None, get_notes)
+        if not notes_list:
+            await query.edit_message_text("❌ Impossible de récupérer les notes réelles.")
+            return ConversationHandler.END
+        real_notes = {
+            n["code"]: {
+                "cc": n.get("cc"), "ex": n.get("ex"), "tp": n.get("tp"),
+                "moy_sr": n.get("moy_sr"), "decision": n.get("decision"),
+            }
+            for n in notes_list
+        }
 
     sim = context.user_data["sim"]
     msg = _build_sim_result(sim["module_code"], real_notes, sim["virtual_notes"])
