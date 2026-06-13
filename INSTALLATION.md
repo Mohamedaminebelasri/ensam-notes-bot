@@ -230,6 +230,15 @@ Le fichier `.env` contient une valeur incorrecte pour `NIVEAU=` ou `FILIERE=`.
 - **Windows :** supprime le dossier `runtime/` et relance `lancer.bat` pour réinstaller Python
 - **Mac/Linux :** supprime le dossier `venv/` et relance `./lancer.sh`
 
+### ❓ Le bot s'est arrêté sans message / crash silencieux
+Le bot génère un fichier `crash.log` dans son dossier dès qu'une erreur inattendue se produit.
+1. Ouvre le dossier du bot
+2. Cherche le fichier `crash.log`
+3. S'il contient du texte, **copie l'intégralité de son contenu**
+4. Ouvre une [Issue sur GitHub](https://github.com/Mohamedaminebelasri/ensam-notes-bot/issues) et **colle le contenu du `crash.log`** dans ta description
+
+> Sans ce fichier, il est très difficile de diagnostiquer un arrêt silencieux. C'est l'information la plus utile que tu puisses fournir.
+
 ---
 
 *Problème non listé ? Ouvre une [Issue sur GitHub](https://github.com/Mohamedaminebelasri/ensam-notes-bot/issues) en précisant ta filière, l'étape concernée et le message d'erreur exact.*

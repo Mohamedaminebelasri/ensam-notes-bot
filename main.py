@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import sys
 import pytz
@@ -14,6 +15,22 @@ load_dotenv()
 
 _MAROC          = pytz.timezone('Africa/Casablanca')
 _HEARTBEAT_FILE = os.path.join(os.path.dirname(__file__), "heartbeat.json")
+_LOG_FILE       = os.path.join(os.path.dirname(__file__), "crash.log")
+
+logging.basicConfig(
+    level=logging.WARNING,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    handlers=[
+        logging.FileHandler(_LOG_FILE, encoding="utf-8"),
+        logging.StreamHandler(),
+    ],
+)
+_logger = logging.getLogger(__name__)
+
+# Capture les erreurs internes de python-telegram-bot, httpx et APScheduler
+logging.getLogger("telegram").setLevel(logging.WARNING)
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("apscheduler").setLevel(logging.WARNING)
 
 _consecutive_errors = 0
 _MAX_ERRORS         = 3
@@ -45,6 +62,7 @@ def _setup_crash_handler():
     original = sys.excepthook
     def _hook(exc_type, exc_value, exc_tb):
         if not issubclass(exc_type, KeyboardInterrupt):
+            _logger.critical("UNCAUGHT EXCEPTION", exc_info=(exc_type, exc_value, exc_tb))
             _send_alert(
                 f"💀 <b>Bot ENSAM crashé !</b>\n"
                 f"<code>{exc_type.__name__}: {exc_value}</code>\n\n"
@@ -274,6 +292,7 @@ def main():
     except KeyboardInterrupt:
         pass
     except Exception as e:
+        _logger.exception("CRASH FATAL — run_polling() s'est arrêté")
         _send_alert(
             f"💀 <b>Bot ENSAM — Telegram polling crashé !</b>\n"
             f"<code>{type(e).__name__}: {e}</code>\n\n"
