@@ -3,6 +3,17 @@ Assistant de configuration interactif — Bot ENSAM Notes.
 Lance avec : python setup.py
 """
 
+# ============================================================
+# ENSAM Notes Bot — Surveillance automatique des notes S2
+# Auteur  : Mohamed Amine Belasri
+# École   : ENSAM Meknès — École Nationale Supérieure
+#            d'Arts et Métiers (Université Moulay Ismail)
+# Promo   : 2024–2027
+# GitHub  : https://github.com/Mohamedaminebelasri/ensam-notes-bot
+# Licence : MIT — toute redistribution doit conserver
+#            cette notice et le fichier LICENSE
+# ============================================================
+
 import os
 import sys
 import requests

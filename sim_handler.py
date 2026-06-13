@@ -1,5 +1,16 @@
 """ConversationHandler Telegram pour /sim — simulation de notes."""
 
+# ============================================================
+# ENSAM Notes Bot — Surveillance automatique des notes S2
+# Auteur  : Mohamed Amine Belasri
+# École   : ENSAM Meknès — École Nationale Supérieure
+#            d'Arts et Métiers (Université Moulay Ismail)
+# Promo   : 2024–2027
+# GitHub  : https://github.com/Mohamedaminebelasri/ensam-notes-bot
+# Licence : MIT — toute redistribution doit conserver
+#            cette notice et le fichier LICENSE
+# ============================================================
+
 import asyncio
 import os
 import warnings
