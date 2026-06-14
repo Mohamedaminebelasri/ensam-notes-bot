@@ -328,7 +328,10 @@ def main():
         return
 
     if "--once" in sys.argv:
-        check_notes(); return
+        check_notes()
+        log("--- 2ème appel (test réutilisation session) ---")
+        check_notes()
+        return
 
     _setup_crash_handler()
 
@@ -345,7 +348,7 @@ def main():
     from telegram_bot import build_application, setup_handlers
 
     scheduler = BackgroundScheduler()
-    scheduler.add_job(check_notes,      "interval", minutes=5)
+    scheduler.add_job(check_notes,      "interval", minutes=5, jitter=60)
     scheduler.add_job(_save_heartbeat,  "interval", hours=1)
     scheduler.start()
     log("Scheduler démarré (toutes les 5 min)")

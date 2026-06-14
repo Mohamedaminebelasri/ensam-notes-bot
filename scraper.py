@@ -86,7 +86,11 @@ def _new_session():
     return session
 
 
+_session = None  # session persistante entre les cycles du scheduler
+
+
 def get_notes():
+    global _session
     email    = os.getenv("SCHOOL_EMAIL")
     password = os.getenv("SCHOOL_PASSWORD")
 
@@ -95,17 +99,22 @@ def get_notes():
         return []
 
     for attempt in range(3):
-        session = _new_session()
-        try:
-            if not _do_login(session, email, password):
+        if _session is None:
+            sess = _new_session()
+            if not _do_login(sess, email, password):
                 return []
+            _session = sess
+            print("[OK] Connexion réussie (nouvelle session)", flush=True)
+        else:
+            print("[OK] Session réutilisée", flush=True)
 
-            print("[OK] Connexion réussie", flush=True)
-            resp = fetch_with_retry(session, NOTES_URL)
+        try:
+            resp = fetch_with_retry(_session, NOTES_URL)
             resp.raise_for_status()
 
             if _is_session_expired(resp):
                 print(f"[SCRAPER] Session expirée → reconnexion... ({attempt+1}/3)", flush=True)
+                _session = None
                 continue
 
             soup  = BeautifulSoup(resp.text, "html.parser")
