@@ -254,6 +254,118 @@ def test_main_regression():
 
 
 # ═══════════════════════════════════════════════════════════════
+# TEST G — échec copie mi-chemin → VERSION inchangée → retry réussit
+# ═══════════════════════════════════════════════════════════════
+def test_copy_failure_version_safe():
+    print(f"\n{SEP}")
+    print("TEST (g) — Echec copie 3eme fichier → VERSION inchangee → retry reussit")
+    print(SEP)
+
+    import updater as u
+    import tempfile
+    import shutil as _shutil
+
+    # Répertoire isolé — les faux fichiers ne touchent jamais le projet réel
+    test_dir   = tempfile.mkdtemp(prefix="ensam_test_g_")
+    tmp_dir_g  = os.path.join(test_dir, ".update_tmp")
+    ver_file_g = os.path.join(test_dir, "VERSION")
+
+    # Sauvegarde de l'état original du module
+    orig_base     = u.BASE_DIR
+    orig_tmp      = u.TMP_DIR
+    orig_ver      = u.VER_FILE
+    orig_repo     = u.REPO_RAW
+    orig_download = u._download
+    orig_copy     = u._copy_file
+
+    u.BASE_DIR = test_dir
+    u.TMP_DIR  = tmp_dir_g
+    u.VER_FILE = ver_file_g
+    u.REPO_RAW = "https://invalid.example.test"  # force hors-ligne → tout mocké
+
+    def mock_download(url, dest):
+        """Simule un téléchargement réussi sans réseau."""
+        fname   = os.path.basename(dest)
+        content = "1.0.0" if fname == "VERSION" else f"# updated {fname}\n"
+        os.makedirs(os.path.dirname(dest), exist_ok=True)
+        with open(dest, "w", encoding="utf-8") as f:
+            f.write(content)
+
+    u._download = mock_download
+    ok = True
+
+    try:
+        # ── PHASE 1 : 3ème copie échoue ──────────────────────────────
+        print("\n  Phase 1 — copie echoue sur le 3eme fichier (PermissionError)")
+        _write(ver_file_g, "0.9.0")
+
+        call_count = [0]
+
+        def mock_copy_fail_on_3(src, dst):
+            call_count[0] += 1
+            if call_count[0] == 3:
+                raise PermissionError("Acces refuse (simulation test g)")
+            orig_copy(src, dst)
+
+        u._copy_file = mock_copy_fail_on_3
+        updated1, old1, new1 = u.check_and_apply_update()
+
+        ver_phase1 = _read(ver_file_g)
+        print(f"  updated={updated1}, VERSION='{ver_phase1}', appels_copie={call_count[0]}")
+
+        r1 = check(updated1 is False,
+                   "Phase 1 : retourne False (pas de mise a jour)")
+        r2 = check(ver_phase1 == "0.9.0",
+                   f"Phase 1 : VERSION='{ver_phase1}' (toujours '0.9.0' — non ecrasee)")
+        r3 = check(not os.path.exists(tmp_dir_g),
+                   "Phase 1 : .update_tmp nettoye malgre l'echec")
+        r4 = check(call_count[0] == 3,
+                   f"Phase 1 : 3 appels de _copy_file avant echec (obtenu : {call_count[0]})")
+        ok = ok and r1 and r2 and r3 and r4
+
+        # ── PHASE 2 : retry — tout reussit ───────────────────────────
+        print("\n  Phase 2 — retry (simule relancement lancer.bat)")
+        # VERSION locale = "0.9.0" encore (simule le relancement)
+        u._copy_file  = orig_copy   # restaure la vraie copie
+        call_count[0] = 0
+
+        updated2, old2, new2 = u.check_and_apply_update()
+
+        ver_phase2 = _read(ver_file_g)
+        print(f"  updated={updated2}, old='{old2}', new='{new2}', VERSION='{ver_phase2}'")
+
+        r5 = check(updated2 is True,
+                   "Phase 2 : mise a jour reussie au retry")
+        r6 = check(old2 == "0.9.0",
+                   f"Phase 2 : ancienne version '{old2}'")
+        r7 = check(new2 == "1.0.0",
+                   f"Phase 2 : nouvelle version '{new2}'")
+        r8 = check(ver_phase2 == "1.0.0",
+                   f"Phase 2 : VERSION='{ver_phase2}' (mise a jour vers '1.0.0')")
+        r9 = check(not os.path.exists(tmp_dir_g),
+                   "Phase 2 : .update_tmp nettoye apres retry reussi")
+
+        # Verifie que les vrais fichiers du projet n'ont PAS ete touches
+        real_ver = _read(os.path.join(orig_base, "VERSION"))
+        r10 = check(real_ver == "1.0.0",
+                    f"Fichiers reels intacts : VERSION projet='{real_ver}'")
+
+        ok = ok and r5 and r6 and r7 and r8 and r9 and r10
+
+    finally:
+        # Restaure l'etat original du module
+        u.BASE_DIR   = orig_base
+        u.TMP_DIR    = orig_tmp
+        u.VER_FILE   = orig_ver
+        u.REPO_RAW   = orig_repo
+        u._download  = orig_download
+        u._copy_file = orig_copy
+        _shutil.rmtree(test_dir, ignore_errors=True)
+
+    return ok
+
+
+# ═══════════════════════════════════════════════════════════════
 # MAIN
 # ═══════════════════════════════════════════════════════════════
 if __name__ == "__main__":
@@ -264,6 +376,7 @@ if __name__ == "__main__":
     results.append(("(c) Réseau KO → silencieux",test_network_failure()))
     results.append(("(d) .env/notes.json intacts",test_env_preserved()))
     results.append(("(e) Régression main.py",    test_main_regression()))
+    results.append(("(g) Copie échouée → VERSION safe → retry", test_copy_failure_version_safe()))
 
     print(f"\n{'=' * 62}")
     print("BILAN FINAL")

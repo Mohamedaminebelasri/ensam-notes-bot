@@ -49,6 +49,11 @@ def _download(url, dest):
         f.write(data)
 
 
+def _copy_file(src, dst):
+    """Copie un fichier. Fonction séparée pour faciliter les tests."""
+    shutil.copy2(src, dst)
+
+
 def _cleanup():
     if os.path.exists(TMP_DIR):
         shutil.rmtree(TMP_DIR, ignore_errors=True)
@@ -98,11 +103,18 @@ def check_and_apply_update(log_fn=None):
         _cleanup()
         return (False, local_ver, local_ver)
 
-    # Tous les téléchargements réussis → copie atomique
-    for fname in UPDATE_FILES:
-        src = os.path.join(TMP_DIR, fname)
-        dst = os.path.join(BASE_DIR, fname)
-        shutil.copy2(src, dst)
+    # Copie tous les fichiers SAUF VERSION (VERSION = marqueur de commit final)
+    # Si une copie échoue : VERSION reste ancienne → prochain lancement retente
+    non_version = [f for f in UPDATE_FILES if f != "VERSION"]
+    try:
+        for fname in non_version:
+            _copy_file(os.path.join(TMP_DIR, fname), os.path.join(BASE_DIR, fname))
+    except Exception:
+        _cleanup()
+        return (False, local_ver, local_ver)
+
+    # Toutes les copies réussies → VERSION en dernier (marqueur de commit)
+    _copy_file(os.path.join(TMP_DIR, "VERSION"), os.path.join(BASE_DIR, "VERSION"))
 
     _cleanup()
 
