@@ -50,6 +50,8 @@ Voir **[INSTALLATION.md](INSTALLATION.md)** — guide pas à pas sans connaissan
 3. Double-clic sur `lancer.bat` — il gère tout automatiquement
 4. Envoyer `/bilan` à ton bot pour vérifier
 
+Pour faire tourner le bot 24/7 sans garder ton PC allumé, voir **[DEPLOIEMENT_24H.md](DEPLOIEMENT_24H.md)** (optionnel, ~30 min).
+
 ---
 
 ## 🛠️ Architecture technique

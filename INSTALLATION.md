@@ -124,7 +124,7 @@ Pour recevoir des notifications même quand ton PC est éteint, tu peux déploye
 - Serveur Linux gratuit à vie (pas de carte bancaire requise au-delà de la vérification d'identité)
 - Le projet inclut un `Dockerfile` pour faciliter le déploiement
 
-**Besoin d'aide ?** Contacte Mohamed Amine Belasri directement — il peut t'aider à configurer ton propre serveur.
+Consulte le guide complet pas à pas : **[DEPLOIEMENT_24H.md](DEPLOIEMENT_24H.md)** (~30-45 minutes, une seule fois).
 
 ---
 
