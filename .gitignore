@@ -41,3 +41,6 @@ Thumbs.db
 
 # Config locale (contient IP serveur et chemins locaux)
 .claude/
+
+# Dossier temporaire de mise à jour automatique
+.update_tmp/

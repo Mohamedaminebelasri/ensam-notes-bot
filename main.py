@@ -53,6 +53,18 @@ def log(msg: str):
     print(f"[{now}] {msg}", flush=True)
 
 
+def check_update_job():
+    """Tâche quotidienne : vérifie et applique une mise à jour si disponible."""
+    try:
+        from updater import check_and_apply_update
+        updated, old, new = check_and_apply_update(log_fn=log)
+        if updated:
+            log(f"🔄 Mise à jour v{old}→v{new} appliquée — redémarrage...")
+            sys.exit(0)  # systemd (Restart=always) relance avec le nouveau code
+    except Exception as e:
+        log(f"[update] Vérification ignorée : {e}")
+
+
 def _now_str():
     return datetime.now(_MAROC).strftime('%d/%m/%Y à %H:%M')
 
@@ -348,8 +360,9 @@ def main():
     from telegram_bot import build_application, setup_handlers
 
     scheduler = BackgroundScheduler()
-    scheduler.add_job(check_notes,      "interval", minutes=5, jitter=60)
-    scheduler.add_job(_save_heartbeat,  "interval", hours=1)
+    scheduler.add_job(check_notes,        "interval", minutes=5, jitter=60)
+    scheduler.add_job(_save_heartbeat,    "interval", hours=1)
+    scheduler.add_job(check_update_job,   "interval", hours=24)
     scheduler.start()
     log("Scheduler démarré (toutes les 5 min)")
 
