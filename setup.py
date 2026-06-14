@@ -41,6 +41,46 @@ def _sep():
     _print("─" * 55)
 
 
+# ─── saisie masquée (optionnelle) ────────────────────────────────────────────
+
+def masked_input(prompt: str) -> str:
+    """Lit une saisie en affichant '*' à la place des caractères.
+    Windows : msvcrt caractère par caractère. Mac/Linux : getpass."""
+    if sys.platform == "win32":
+        import msvcrt
+        print(prompt, end="", flush=True)
+        chars = []
+        while True:
+            ch = msvcrt.getwch()
+            if ch in ('\r', '\n'):         # Entrée
+                print()
+                break
+            elif ch == '\x08':            # Backspace
+                if chars:
+                    chars.pop()
+                    print('\b \b', end='', flush=True)
+            elif ch == '\x03':            # Ctrl+C
+                raise KeyboardInterrupt
+            elif ch in ('\x00', '\xe0'):  # préfixe touche spéciale (flèches, Fn)
+                msvcrt.getwch()           # consomme le 2ème octet, ignore
+            elif ch >= ' ':              # caractère imprimable
+                chars.append(ch)
+                print('*', end='', flush=True)
+        return ''.join(chars)
+    else:
+        import getpass
+        return getpass.getpass(prompt)
+
+
+def _ask_mask() -> bool:
+    """Demande si l'utilisateur veut masquer la saisie. Défaut = non (Entrée)."""
+    rep = input(
+        "   Masquer ce champ avec des * pendant la saisie ?\n"
+        "   (o/n — recommandé si tu enregistres ton écran) : "
+    ).strip().lower()
+    return rep in ('o', 'oui', 'y', 'yes')
+
+
 # ─── lecture .env existant ───────────────────────────────────────────────────
 
 def _read_env() -> dict:
@@ -213,14 +253,35 @@ def step_school(existing: dict, demo: bool = False) -> tuple[str, str]:
     _print("🏫  Étape 1/5 — Identifiants SchoolApp ENSAM")
     _print()
 
+    if not demo:
+        _print("   📧  Email SchoolApp :")
+        mask_email = _ask_mask()
+        _print()
+        _print("   🔑  Mot de passe SchoolApp :")
+        mask_password = _ask_mask()
+        if not mask_password:
+            print("   ⚠️  Ton mot de passe sera visible à l'écran —")
+            print("       assure-toi d'être seul devant ton PC.")
+        _print()
+    else:
+        mask_email = mask_password = False
+        print("   ⚠️  Ton mot de passe sera visible à l'écran —")
+        print("       assure-toi d'être seul devant ton PC.")
+        _print()
+
     while True:
         default_email = existing.get("SCHOOL_EMAIL", "")
         prompt_email  = f"   Email [{default_email}] : " if default_email else "   Email : "
-        email = input(prompt_email).strip() or default_email
 
-        print("   ⚠️  Ton mot de passe sera visible à l'écran —")
-        print("       assure-toi d'être seul devant ton PC.")
-        password = input("   Mot de passe : ")
+        if mask_email:
+            email = masked_input(prompt_email).strip() or default_email
+        else:
+            email = input(prompt_email).strip() or default_email
+
+        if mask_password:
+            password = masked_input("   Mot de passe : ")
+        else:
+            password = input("   Mot de passe : ")
 
         if demo:
             _ok("Connexion réussie (mode démo)")
@@ -244,11 +305,17 @@ def step_telegram_token(existing: dict) -> str:
     _print("   2. Envoie /newbot et suis les instructions")
     _print("   3. Colle le token ici (ressemble à 123456:ABC-...)")
     _print()
+    _print("   🔑  Token Telegram :")
+    mask_token = _ask_mask()
+    _print()
 
     default = existing.get("TELEGRAM_TOKEN", "")
     while True:
         prompt = f"   Token [{default[:20]}...] : " if default else "   Token : "
-        token  = input(prompt).strip() or default
+        if mask_token:
+            token = masked_input(prompt).strip() or default
+        else:
+            token = input(prompt).strip() or default
         if token:
             return token
         _err("Le token ne peut pas être vide.")

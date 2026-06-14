@@ -2739,7 +2739,7 @@
         "INFO41": {
           "nom": "Deep Learning et Réalité Augmentée",
           "coef_mod": 5.0,
-          "seuil": 1.0,
+          "seuil": 12.0,
           "eliminatoire": 8.0,
           "elements": {
             "INFO411": {
@@ -2771,7 +2771,7 @@
         "INFO42": {
           "nom": "Architectures et Ingénierie Logicielles",
           "coef_mod": 5.0,
-          "seuil": 1.0,
+          "seuil": 12.0,
           "eliminatoire": 8.0,
           "elements": {
             "INFO421": {
@@ -2795,7 +2795,7 @@
         "INFO43": {
           "nom": "Frameworks de Développement et Web Services",
           "coef_mod": 5.0,
-          "seuil": 1.0,
+          "seuil": 12.0,
           "eliminatoire": 8.0,
           "elements": {
             "INFO431": {
@@ -2827,7 +2827,7 @@
         "INFO44": {
           "nom": "Projet Métier et Ouverture",
           "coef_mod": 5.0,
-          "seuil": 1.0,
+          "seuil": 12.0,
           "eliminatoire": 8.0,
           "elements": {
             "INFO441": {
@@ -3320,7 +3320,7 @@
           "nom": "ROBOTIQUE INDUSTRIELLE ET PROTOTYPAGE RAPIDE",
           "coef_mod": 5.0,
           "seuil": 12.0,
-          "eliminatoire": 80.0,
+          "eliminatoire": 8.0,
           "elements": {
             "CISM411": {
               "nom": "Robotique Industrielle",
@@ -4015,7 +4015,7 @@
         "IA41": {
           "nom": "Prototypage digital",
           "coef_mod": 5.0,
-          "seuil": 2.0,
+          "seuil": 12.0,
           "eliminatoire": 8.0,
           "elements": {
             "IA411": {
@@ -4047,7 +4047,7 @@
         "IA42": {
           "nom": "Intelligence Artificielle Avancée et Modélisation 3D",
           "coef_mod": 5.0,
-          "seuil": 2.0,
+          "seuil": 12.0,
           "eliminatoire": 8.0,
           "elements": {
             "IA421": {
@@ -4079,7 +4079,7 @@
         "IA43": {
           "nom": "Industry X.0, IoT, Virtual and Augmented Reality",
           "coef_mod": 5.0,
-          "seuil": 2.0,
+          "seuil": 12.0,
           "eliminatoire": 8.0,
           "elements": {
             "IA431": {
@@ -4103,7 +4103,7 @@
         "IA44": {
           "nom": "Lean Six Sigma Intelligent et Conception Collaborative Basée sur les Données",
           "coef_mod": 5.0,
-          "seuil": 2.0,
+          "seuil": 12.0,
           "eliminatoire": 8.0,
           "elements": {
             "IA441": {
@@ -4119,7 +4119,7 @@
         "IA45": {
           "nom": "Qualité Oppérationnelle et Maintenance par l'IA",
           "coef_mod": 4.0,
-          "seuil": 2.0,
+          "seuil": 12.0,
           "eliminatoire": 8.0,
           "elements": {
             "IA451": {

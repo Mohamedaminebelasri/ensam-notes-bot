@@ -2760,7 +2760,7 @@ FILIERES = {
                 'INFO41': {
                     'nom': 'Deep Learning et Réalité Augmentée',
                     'coef_mod': 5.0,
-                    'seuil': 1.0,
+                    'seuil': 12.0,
                     'eliminatoire': 8.0,
                     'elements': {
                         'INFO411': {
@@ -2792,7 +2792,7 @@ FILIERES = {
                 'INFO42': {
                     'nom': 'Architectures et Ingénierie Logicielles',
                     'coef_mod': 5.0,
-                    'seuil': 1.0,
+                    'seuil': 12.0,
                     'eliminatoire': 8.0,
                     'elements': {
                         'INFO421': {
@@ -2816,7 +2816,7 @@ FILIERES = {
                 'INFO43': {
                     'nom': 'Frameworks de Développement et Web Services',
                     'coef_mod': 5.0,
-                    'seuil': 1.0,
+                    'seuil': 12.0,
                     'eliminatoire': 8.0,
                     'elements': {
                         'INFO431': {
@@ -2848,7 +2848,7 @@ FILIERES = {
                 'INFO44': {
                     'nom': 'Projet Métier et Ouverture',
                     'coef_mod': 5.0,
-                    'seuil': 1.0,
+                    'seuil': 12.0,
                     'eliminatoire': 8.0,
                     'elements': {
                         'INFO441': {
@@ -3341,7 +3341,7 @@ FILIERES = {
                     'nom': 'ROBOTIQUE INDUSTRIELLE ET PROTOTYPAGE RAPIDE',
                     'coef_mod': 5.0,
                     'seuil': 12.0,
-                    'eliminatoire': 80.0,
+                    'eliminatoire': 8.0,
                     'elements': {
                         'CISM411': {
                             'nom': 'Robotique Industrielle',
@@ -4036,7 +4036,7 @@ FILIERES = {
                 'IA41': {
                     'nom': 'Prototypage digital',
                     'coef_mod': 5.0,
-                    'seuil': 2.0,
+                    'seuil': 12.0,
                     'eliminatoire': 8.0,
                     'elements': {
                         'IA411': {
@@ -4068,7 +4068,7 @@ FILIERES = {
                 'IA42': {
                     'nom': 'Intelligence Artificielle Avancée et Modélisation 3D',
                     'coef_mod': 5.0,
-                    'seuil': 2.0,
+                    'seuil': 12.0,
                     'eliminatoire': 8.0,
                     'elements': {
                         'IA421': {
@@ -4100,7 +4100,7 @@ FILIERES = {
                 'IA43': {
                     'nom': 'Industry X.0, IoT, Virtual and Augmented Reality',
                     'coef_mod': 5.0,
-                    'seuil': 2.0,
+                    'seuil': 12.0,
                     'eliminatoire': 8.0,
                     'elements': {
                         'IA431': {
@@ -4124,7 +4124,7 @@ FILIERES = {
                 'IA44': {
                     'nom': 'Lean Six Sigma Intelligent et Conception Collaborative Basée sur les Données',
                     'coef_mod': 5.0,
-                    'seuil': 2.0,
+                    'seuil': 12.0,
                     'eliminatoire': 8.0,
                     'elements': {
                         'IA441': {
@@ -4140,7 +4140,7 @@ FILIERES = {
                 'IA45': {
                     'nom': "Qualité Oppérationnelle et Maintenance par l'IA",
                     'coef_mod': 4.0,
-                    'seuil': 2.0,
+                    'seuil': 12.0,
                     'eliminatoire': 8.0,
                     'elements': {
                         'IA451': {

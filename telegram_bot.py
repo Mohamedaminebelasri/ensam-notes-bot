@@ -155,7 +155,7 @@ async def cmd_bilan(update: Update, context: ContextTypes.DEFAULT_TYPE):
         result = calc_minimum_restant(notes_dict, mod_code)
 
         if result is None or result["minimum"] is None:
-            minimum_x = 12.0
+            minimum_x = mod_info["seuil"]
         elif result["impossible"]:
             minimum_x = 20.0
         elif result["deja_valide"]:

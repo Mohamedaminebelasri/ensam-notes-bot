@@ -159,17 +159,42 @@ def calc_minimum_restant(notes_dict, module_code):
     }
 
 
-def get_decision_finale(dec_site, moy_calculee, seuil=12.0, eliminatoire=8.0):
+def check_elim_element(notes_dict, module_code):
     """
-    Décision officielle si le site a publié VORD/NV, sinon estimation basée
-    sur la moyenne calculée.
+    Retourne True si au moins un Moy_élément (non None) est < eliminatoire du module.
+    Les éléments sans aucune note (Moy_élément=None) sont ignorés — pas assez
+    de données pour trancher.
+    """
+    module = MODULES.get(module_code)
+    if not module:
+        return False
+    elim = module["eliminatoire"]
+    for code, ei in module["elements"].items():
+        note   = notes_dict.get(code, {})
+        moy_sr = _parse(note.get("moy_sr"))
+        if moy_sr is not None:
+            moy = moy_sr
+        else:
+            moy = calc_moy_element(
+                note.get("cc"), note.get("ex"), note.get("tp"),
+                ei["coef_cc"], ei["coef_ex"], ei["coef_ecrit"], ei["coef_tp"],
+            )
+        if moy is not None and moy < elim:
+            return True
+    return False
+
+
+def get_decision_finale(dec_site, moy_calculee, seuil=12.0, has_elim_element=False):
+    """
+    Décision officielle si le site a publié VORD/NV, sinon estimation.
+    L'élimination est vérifiée au niveau élément (has_elim_element), pas module.
     """
     if dec_site in ("VORD", "NV"):
         return "✅ Validé (officiel)" if dec_site == "VORD" else "❌ Non Validé (officiel)"
+    if has_elim_element:
+        return "❌ Éliminatoire"
     if moy_calculee is None:
         return "⏳ En attente des notes"
-    if moy_calculee < eliminatoire:
-        return "❌ Éliminatoire"
     if moy_calculee < seuil:
         return "⚠️ Rattrapage possible"
     return "✅ Validé (estimé)"
@@ -194,11 +219,3 @@ def est_module_complet(notes_dict, module_code):
     return True
 
 
-def get_statut_module(moy, seuil=12.0, eliminatoire=8.0):
-    if moy is None:
-        return "⏳ En attente"
-    if moy >= seuil:
-        return "✅ Validé"
-    if moy < eliminatoire:
-        return "❌ Éliminatoire"
-    return "⚠️ Rattrapage possible"

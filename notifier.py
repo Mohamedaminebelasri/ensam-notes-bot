@@ -21,7 +21,7 @@ _MAROC = pytz.timezone('Africa/Casablanca')
 from modules import MODULES
 from calculator import (
     calc_minimum_restant, calc_moy_element, calc_moy_module,
-    get_decision_finale, est_module_complet,
+    get_decision_finale, est_module_complet, check_elim_element,
 )
 
 load_dotenv()
@@ -195,16 +195,16 @@ def _build_message_complet(mod_code, mod_info, notes_dict):
 
     moy   = calc_moy_module(notes_dict, mod_code)
     seuil = mod_info["seuil"]
-    elim  = mod_info["eliminatoire"]
 
-    moy_str = f"{moy:.2f}" if moy is not None else "—"
+    moy_str  = f"{moy:.2f}" if moy is not None else "—"
+    has_elim = check_elim_element(notes_dict, mod_code)
 
-    if moy is None:
+    if has_elim:
+        statut = "❌ NON VALIDÉ (éliminatoire)"
+    elif moy is None:
         statut = "⏳ En attente"
     elif moy >= seuil:
         statut = "✅ VALIDÉ"
-    elif moy < elim:
-        statut = "❌ NON VALIDÉ (éliminatoire)"
     else:
         statut = "⚠️ RATTRAPAGE"
 
@@ -254,7 +254,7 @@ def _build_message(elem_code, elem_changes, notes_dict):
     result   = calc_minimum_restant(notes_dict, mod_code)
 
     if result is None or result["minimum"] is None:
-        minimum_x = 12.0
+        minimum_x = mod_info["seuil"]
     elif result["deja_valide"]:
         minimum_x = max(0.0, result["minimum"] if result["minimum"] is not None else 0.0)
     elif result["impossible"]:
@@ -274,8 +274,9 @@ def _build_message(elem_code, elem_changes, notes_dict):
     # Décision : officielle (VORD/NV) ou estimée à partir de la moy calculée
     dec_site      = _get_module_dec(mod_info, notes_dict)
     moy_calc      = calc_moy_module(notes_dict, mod_code)
+    has_elim      = check_elim_element(notes_dict, mod_code)
     decision_text = get_decision_finale(
-        dec_site, moy_calc, mod_info["seuil"], mod_info["eliminatoire"]
+        dec_site, moy_calc, mod_info["seuil"], has_elim_element=has_elim
     )
 
     table  = _build_table(mod_info, notes_dict, minimum_x)
