@@ -186,6 +186,44 @@ def _build_rat_message(elem_code, notes_dict):
     )
 
 
+def _build_moysr_message(elem_code, notes_dict):
+    """Message quand moy_sr (résultat officiel après rattrapage) est publié."""
+    mod_code, mod_info = _find_module(elem_code)
+    now        = datetime.now(_MAROC).strftime("%d/%m/%Y à %H:%M")
+    moy_sr_val = notes_dict.get(elem_code, {}).get("moy_sr")
+    moy_sr_str = f"{moy_sr_val:.2f}" if moy_sr_val is not None else "—"
+
+    if mod_info is None:
+        return (
+            f"🎓 <b>Résultat officiel publié (après rattrapage) !</b>\n\n"
+            f"📦 Module non défini\n"
+            f"📚 {elem_code}\n"
+            f"📝 Moyenne finale : {moy_sr_str}/20\n\n"
+            f"⏰ {now}"
+        )
+
+    mod_nom  = mod_info["nom"]
+    elem_nom = mod_info["elements"][elem_code]["nom"]
+
+    dec_site         = _get_module_dec(mod_info, notes_dict)
+    elim_nom         = find_elim_element(notes_dict, mod_code)
+    moy_calc         = calc_moy_module(notes_dict, mod_code)
+    decision, reason = get_decision_finale(dec_site, moy_calc, mod_info["seuil"], elim_nom)
+
+    dec_block = f"🏆 Nouvelle décision du module {mod_code} :\n{decision}"
+    if reason:
+        dec_block += f"\n{reason}"
+
+    return (
+        f"🎓 <b>Résultat officiel publié (après rattrapage) !</b>\n\n"
+        f"📦 {mod_nom}\n"
+        f"📚 {elem_nom}\n"
+        f"📝 Moyenne finale : {moy_sr_str}/20\n\n"
+        f"{dec_block}\n\n"
+        f"⏰ {now}"
+    )
+
+
 def _build_message_complet(mod_code, mod_info, notes_dict):
     """Message spécial quand toutes les notes du module sont publiées (aucun ⚠️)."""
     now = datetime.now().strftime("%d/%m/%Y à %H:%M")
@@ -320,8 +358,11 @@ def notify_changes(changes: list, notes_dict: dict):
         grouped[c["code"]].append(c)
     for elem_code, elem_changes in grouped.items():
         rat_changes   = [c for c in elem_changes if c["type"] == "rat"]
-        other_changes = [c for c in elem_changes if c["type"] != "rat"]
+        moysr_changes = [c for c in elem_changes if c["type"] == "moy_sr"]
+        other_changes = [c for c in elem_changes if c["type"] not in ("rat", "moy_sr")]
         if rat_changes:
             send_telegram(_build_rat_message(elem_code, notes_dict))
+        if moysr_changes:
+            send_telegram(_build_moysr_message(elem_code, notes_dict))
         if other_changes:
             send_telegram(_build_message(elem_code, other_changes, notes_dict))

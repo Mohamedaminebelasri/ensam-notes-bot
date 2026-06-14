@@ -62,7 +62,7 @@ def find_changes(old: dict, new: list) -> list:
     for note in new:
         code     = note["code"]
         old_note = old.get(code, {})
-        for field in ("cc", "ex", "tp", "rat"):
+        for field in ("cc", "ex", "tp", "rat", "moy_sr"):
             old_val = old_note.get(field)
             new_val = note.get(field)
             if new_val is not None and old_val != new_val:

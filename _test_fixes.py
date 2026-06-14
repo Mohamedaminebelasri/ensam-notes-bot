@@ -326,6 +326,90 @@ def test_api_signature():
 
 
 # ═══════════════════════════════════════════════════════════════
+# TEST G — notification MoySR
+# ═══════════════════════════════════════════════════════════════
+def test_moysr_notification():
+    print(f"\n{SEP}")
+    print("TEST (g) — Notification MoySR (résultat officiel après rattrapage)")
+    print("  IA211 moy_sr : None → 14.0")
+    print(SEP)
+
+    import comparator as comp
+    import calculator as cm
+    from notifier import _build_moysr_message, _find_module
+
+    # 1. comparator.find_changes surveille bien moy_sr
+    old = {"IA211": {"cc": 12.0, "ex": 10.5, "tp": None, "rat": None,
+                     "moy_so": None, "moy_sr": None, "decision": None}}
+    new = [{"code": "IA211", "cc": 12.0, "ex": 10.5, "tp": None, "rat": None,
+             "moy_so": None, "moy_sr": 14.0, "decision": None}]
+    changes = comp.find_changes(old, new)
+    moysr_changes = [c for c in changes if c["type"] == "moy_sr"]
+    r1 = check(len(moysr_changes) == 1 and moysr_changes[0]["nouvelle"] == 14.0,
+               "find_changes detecte moy_sr None→14.0",
+               f"changes={changes}")
+    ok = r1
+
+    # 2. Decision recalculée avec moy_sr court-circuité
+    notes_dict = {
+        "IA211": {"cc": 12.0, "ex": 10.5, "tp": None, "rat": None,
+                  "moy_so": None, "moy_sr": 14.0, "decision": None},
+        "IA212": {"cc": 14.5, "ex": 14.0, "tp": None, "rat": None,
+                  "moy_so": None, "moy_sr": None, "decision": None},
+    }
+
+    # IA211 : moy_sr=14.0 court-circuite (>=8.0)
+    # IA212 : calc = (14.5*0.5 + 14.0*0.5)/1.0 = 14.25 (>=8.0)
+    # Moy_module IA21 = (14.0*1.0 + 14.25*1.0) / 2.0 = 14.125
+    moy_ia21 = cm.calc_moy_module(notes_dict, "IA21")
+    elim_nom  = cm.find_elim_element(notes_dict, "IA21")
+    dec, rsn  = cm.get_decision_finale(None, moy_ia21, 12.0, elim_nom)
+
+    print(f"\n  IA21 moy_module={moy_ia21:.4f}, elim_nom={elim_nom}")
+    print(f"  decision='{dec}', raison={rsn}")
+
+    r2 = check(abs(moy_ia21 - 14.125) < 1e-3,
+               f"Moy_module IA21={moy_ia21:.4f} (attendu ~14.125)")
+    r3 = check(elim_nom is None,
+               "Aucun element eliminatoire (14.0 et 14.25 >= 8.0)")
+    r4 = check(dec == DEC_VALIDE and rsn is None,
+               f"Decision='{dec}'",
+               f"attendu: '{DEC_VALIDE}'")
+    ok = ok and r2 and r3 and r4
+
+    # 3. Message exact généré par _build_moysr_message
+    msg = _build_moysr_message("IA211", notes_dict)
+    print(f"\n  MESSAGE EXACT _build_moysr_message(IA211) :")
+    print("  " + msg.replace("\n", "\n  "))
+
+    r5 = check("14.00/20" in msg, "Message contient 'Moyenne finale : 14.00/20'")
+    r6 = check("IA21" in msg,     "Message contient le code module 'IA21'")
+    r7 = check(DEC_VALIDE in msg, f"Message contient '{DEC_VALIDE}'")
+    r8 = check("Advanced Machine Learning Techniques" in msg,
+               "Message contient le nom de l'element IA211")
+    ok = ok and r5 and r6 and r7 and r8
+
+    # 4. Cas éliminatoire avec moy_sr : IA211 moy_sr=5.0 (<8.0 elim)
+    print(f"\n  Sous-test : IA211 moy_sr=5.0 (< eliminatoire=8.0)")
+    notes_elim = {
+        "IA211": {"cc": None, "ex": None, "tp": None, "rat": None,
+                  "moy_so": None, "moy_sr": 5.0, "decision": None},
+        "IA212": {"cc": 14.5, "ex": 14.0, "tp": None, "rat": None,
+                  "moy_so": None, "moy_sr": None, "decision": None},
+    }
+    msg_elim = _build_moysr_message("IA211", notes_elim)
+    print("  " + msg_elim.replace("\n", "\n  "))
+
+    r9 = check(DEC_NON_VALID in msg_elim,
+               f"Cas elim : decision='{DEC_NON_VALID}' dans le message")
+    r10 = check(REASON_PREFIX in msg_elim,
+                "Cas elim : raison elinatoire presente dans le message")
+    ok = ok and r9 and r10
+
+    return ok
+
+
+# ═══════════════════════════════════════════════════════════════
 # MAIN
 # ═══════════════════════════════════════════════════════════════
 if __name__ == "__main__":
@@ -335,6 +419,7 @@ if __name__ == "__main__":
     results.append(("Regression 3A/IATD-SI (a)",        test_regression_3A()))
     results.append(("Elim niveau element (b)",           test_elim_element()))
     results.append(("Sous seuil sans elim (c)",          test_sous_seuil_sans_elim()))
+    results.append(("Notification MoySR (g)",            test_moysr_notification()))
 
     print(f"\n{'=' * 62}")
     print("BILAN FINAL")
