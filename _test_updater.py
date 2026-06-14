@@ -107,36 +107,49 @@ def test_no_update_when_same_version():
 def test_update_from_old_version():
     print(f"\n{SEP}")
     print("TEST (b) — VERSION locale='0.9.0' → mise à jour vers 1.0.0")
-    print("  (télécharge les fichiers réels depuis GitHub — nécessite internet)")
+    print("  (télécharge depuis GitHub dans un répertoire isolé — fichiers réels intacts)")
     print(SEP)
 
     import updater as u
-    orig_ver = _read(u.VER_FILE)
+    import tempfile
+    import shutil as _shutil
 
-    _write(u.VER_FILE, "0.9.0")
+    # Répertoire isolé : les téléchargements n'écrasent JAMAIS les fichiers réels
+    test_dir   = tempfile.mkdtemp(prefix="ensam_test_b_")
+    ver_file_b = os.path.join(test_dir, "VERSION")
+
+    orig_base = u.BASE_DIR
+    orig_tmp  = u.TMP_DIR
+    orig_ver  = u.VER_FILE
+    u.BASE_DIR = test_dir
+    u.TMP_DIR  = os.path.join(test_dir, ".update_tmp")
+    u.VER_FILE = ver_file_b
+
+    _write(ver_file_b, "0.9.0")
     try:
         updated, old, new = u.check_and_apply_update(log_fn=print)
         print(f"  → updated={updated}, old={old!r}, new={new!r}")
 
         if not updated:
-            # Peut arriver si pas d'internet — traité comme test ignoré
             print("  ⚠️  Pas de réseau ou dépôt inaccessible — test ignoré")
-            _write(u.VER_FILE, orig_ver or "1.0.0")
             return check(True, "Test b ignoré (hors ligne) — non bloquant")
 
         r1 = check(updated is True, "Mise à jour détectée et appliquée")
         r2 = check(old == "0.9.0",  f"Ancienne version correcte: {old!r}")
         r3 = check(new == "1.0.0",  f"Nouvelle version correcte: {new!r}")
-        r4 = check(_read(u.VER_FILE) == "1.0.0",
-                   f"VERSION sur disque = '1.0.0'")
+        r4 = check(_read(ver_file_b) == "1.0.0",
+                   f"VERSION dans répertoire isolé = '1.0.0'")
         r5 = check(not os.path.exists(u.TMP_DIR),
                    ".update_tmp nettoyé après mise à jour")
-        return r1 and r2 and r3 and r4 and r5
+        # Fichiers réels intacts
+        r6 = check(_read(os.path.join(orig_base, "VERSION")) == "1.0.0",
+                   "VERSION réelle du projet non touchée")
+        return r1 and r2 and r3 and r4 and r5 and r6
     finally:
-        # Restaure la version correcte quelle que soit l'issue
-        cur = _read(u.VER_FILE)
-        if cur not in ("1.0.0", None):
-            _write(u.VER_FILE, "1.0.0")
+        u.BASE_DIR = orig_base
+        u.TMP_DIR  = orig_tmp
+        u.VER_FILE = orig_ver
+        _shutil.rmtree(test_dir, ignore_errors=True)
 
 
 # ═══════════════════════════════════════════════════════════════
