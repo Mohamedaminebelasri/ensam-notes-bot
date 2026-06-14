@@ -159,15 +159,15 @@ def calc_minimum_restant(notes_dict, module_code):
     }
 
 
-def check_elim_element(notes_dict, module_code):
+def find_elim_element(notes_dict, module_code):
     """
-    Retourne True si au moins un Moy_élément (non None) est < eliminatoire du module.
-    Les éléments sans aucune note (Moy_élément=None) sont ignorés — pas assez
-    de données pour trancher.
+    Retourne le nom (ei["nom"]) du premier élément dont Moy_élément est strictement
+    < eliminatoire du module, ou None si aucun ne l'est.
+    Les éléments sans aucune note (Moy_élément=None) sont ignorés.
     """
     module = MODULES.get(module_code)
     if not module:
-        return False
+        return None
     elim = module["eliminatoire"]
     for code, ei in module["elements"].items():
         note   = notes_dict.get(code, {})
@@ -180,24 +180,34 @@ def check_elim_element(notes_dict, module_code):
                 ei["coef_cc"], ei["coef_ex"], ei["coef_ecrit"], ei["coef_tp"],
             )
         if moy is not None and moy < elim:
-            return True
-    return False
+            return ei["nom"]
+    return None
 
 
-def get_decision_finale(dec_site, moy_calculee, seuil=12.0, has_elim_element=False):
+def get_decision_finale(dec_site, moy_calculee, seuil=12.0, elim_element_name=None):
     """
-    Décision officielle si le site a publié VORD/NV, sinon estimation.
-    L'élimination est vérifiée au niveau élément (has_elim_element), pas module.
+    Retourne (decision_text, reason_text_ou_None).
+
+    Deux résultats estimés seulement :
+      "✅ Validé (estimé)"       — moy_module >= seuil, pas d'élément éliminatoire
+      "❌ Non validé (rattrapage)" — sinon (moy < seuil OU élément éliminatoire)
+
+    Si elim_element_name fourni, reason = "⚠️ Note éliminatoire dans : {nom}".
+    Les décisions officielles VORD/NV du site sont retournées inchangées.
     """
     if dec_site in ("VORD", "NV"):
-        return "✅ Validé (officiel)" if dec_site == "VORD" else "❌ Non Validé (officiel)"
-    if has_elim_element:
-        return "❌ Éliminatoire"
+        text = "✅ Validé (officiel)" if dec_site == "VORD" else "❌ Non Validé (officiel)"
+        return (text, None)
+    if elim_element_name is not None:
+        return (
+            "❌ Non validé (rattrapage)",
+            f"⚠️ Note éliminatoire dans : {elim_element_name}",
+        )
     if moy_calculee is None:
-        return "⏳ En attente des notes"
-    if moy_calculee < seuil:
-        return "⚠️ Rattrapage possible"
-    return "✅ Validé (estimé)"
+        return ("⏳ En attente des notes", None)
+    if moy_calculee >= seuil:
+        return ("✅ Validé (estimé)", None)
+    return ("❌ Non validé (rattrapage)", None)
 
 
 def est_module_complet(notes_dict, module_code):

@@ -21,7 +21,7 @@ _MAROC = pytz.timezone('Africa/Casablanca')
 from modules import MODULES
 from calculator import (
     calc_minimum_restant, calc_moy_element, calc_moy_module,
-    get_decision_finale, est_module_complet, check_elim_element,
+    get_decision_finale, est_module_complet, find_elim_element,
 )
 
 load_dotenv()
@@ -193,35 +193,24 @@ def _build_message_complet(mod_code, mod_info, notes_dict):
     # Toutes les notes sont réelles → minimum_x ne sert à rien, aucun ⚠️
     table = _build_table(mod_info, notes_dict, 0.0)
 
-    moy   = calc_moy_module(notes_dict, mod_code)
-    seuil = mod_info["seuil"]
-
+    moy      = calc_moy_module(notes_dict, mod_code)
+    seuil    = mod_info["seuil"]
     moy_str  = f"{moy:.2f}" if moy is not None else "—"
-    has_elim = check_elim_element(notes_dict, mod_code)
 
-    if has_elim:
-        statut = "❌ NON VALIDÉ (éliminatoire)"
-    elif moy is None:
-        statut = "⏳ En attente"
-    elif moy >= seuil:
-        statut = "✅ VALIDÉ"
-    else:
-        statut = "⚠️ RATTRAPAGE"
+    dec_site  = _get_module_dec(mod_info, notes_dict)
+    elim_nom  = find_elim_element(notes_dict, mod_code)
+    decision, reason = get_decision_finale(dec_site, moy, seuil, elim_nom)
 
-    dec_site = _get_module_dec(mod_info, notes_dict)
-    if dec_site == "VORD":
-        dec_line = "\nDécision officielle : ✅ Validé (officiel)"
-    elif dec_site == "NV":
-        dec_line = "\nDécision officielle : ❌ Non Validé (officiel)"
-    else:
-        dec_line = ""
+    statut_block = decision
+    if reason:
+        statut_block += f"\n{reason}"
 
     return (
         f"🎓 <b>Module complété !</b>\n\n"
         f"📦 {mod_info['nom']}\n\n"
         f"<pre>{table}</pre>\n\n"
         f"🎯 Moyenne finale : {moy_str}/20\n"
-        f"{statut}{dec_line}\n\n"
+        f"{statut_block}\n\n"
         f"⏰ {now}"
     )
 
@@ -271,13 +260,14 @@ def _build_message(elem_code, elem_changes, notes_dict):
     else:
         min_line = f"→ {result['minimum']}/20 dans les notes restantes"
 
-    # Décision : officielle (VORD/NV) ou estimée à partir de la moy calculée
-    dec_site      = _get_module_dec(mod_info, notes_dict)
-    moy_calc      = calc_moy_module(notes_dict, mod_code)
-    has_elim      = check_elim_element(notes_dict, mod_code)
-    decision_text = get_decision_finale(
-        dec_site, moy_calc, mod_info["seuil"], has_elim_element=has_elim
-    )
+    # Décision : officielle (VORD/NV) ou estimée à partir des moyennes calculées
+    dec_site           = _get_module_dec(mod_info, notes_dict)
+    moy_calc           = calc_moy_module(notes_dict, mod_code)
+    elim_nom           = find_elim_element(notes_dict, mod_code)
+    decision, reason   = get_decision_finale(dec_site, moy_calc, mod_info["seuil"], elim_nom)
+    decision_block     = f"🏆 Décision : {decision}"
+    if reason:
+        decision_block += f"\n   {reason}"
 
     table  = _build_table(mod_info, notes_dict, minimum_x)
     moy_12 = _calc_moy_if_12(notes_dict, mod_info)
@@ -294,7 +284,7 @@ def _build_message(elem_code, elem_changes, notes_dict):
         f"{notes_lines}\n\n"
         f"🎯 <b>Minimum pour valider {mod_code} (≥{mod_info['seuil']}/20) :</b>\n"
         f"   {min_line}\n"
-        f"🏆 Décision : {decision_text}\n\n"
+        f"{decision_block}\n\n"
         f"<pre>{table}</pre>\n\n"
         f"{moy_12_line}\n\n"
         f"⏰ {now}"

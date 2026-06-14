@@ -1,315 +1,327 @@
+# -*- coding: utf-8 -*-
 """
-Tests de non-régression + validation des corrections.
+Tests de validation — logique 2 categories + base de donnees 4A.
 Lance avec :  python _test_fixes.py   (depuis le dossier du projet)
 """
 
-import os, sys
-import io
-
-# Force UTF-8 sur stdout (emojis sur Windows)
+import os, sys, io
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 
-# Force 3A/IATD-SI pour les tests de régression (config habituelle)
 os.environ.setdefault("NIVEAU",  "3A")
 os.environ.setdefault("FILIERE", "IATD-SI")
 
-PASS = "✅ PASS"
-FAIL = "❌ FAIL"
-SEP  = "─" * 60
+SEP = "-" * 62
+_ok_count   = 0
+_fail_count = 0
+
+DEC_VALIDE    = "✅ Validé (estimé)"        # ✅ Validé (estimé)
+DEC_NON_VALID = "❌ Non validé (rattrapage)"     # ❌ Non validé (rattrapage)
+DEC_ATTENTE   = "⏳ En attente des notes"              # ⏳ En attente des notes
+DEC_VORD      = "✅ Validé (officiel)"            # ✅ Validé (officiel)
+DEC_NV        = "❌ Non Validé (officiel)"        # ❌ Non Validé (officiel)
+REASON_PREFIX = "⚠️ Note éliminatoire dans : "  # ⚠️ Note éliminatoire dans :
 
 
 def check(cond, label, detail=""):
-    status = PASS if cond else FAIL
-    print(f"  {status}  {label}")
+    global _ok_count, _fail_count
+    if cond:
+        _ok_count += 1
+        tag = "[PASS]"
+    else:
+        _fail_count += 1
+        tag = "[FAIL]"
+    print(f"  {tag}  {label}")
     if detail:
-        print(f"        {detail}")
+        print(f"         {detail}")
     return cond
 
 
 # ═══════════════════════════════════════════════════════════════
-# TEST C/D/E — valeurs seuil/eliminatoire en 4A (base de données)
+# TESTS D/E/F — valeurs 4A dans la base de donnees
 # ═══════════════════════════════════════════════════════════════
-def test_database_values():
+def test_database_4A():
     print(f"\n{SEP}")
-    print("TEST (c/d/e) — Vérification des valeurs 4A dans filieres_database")
+    print("TEST (d/e/f) — Valeurs 4A dans filieres_database")
     print(SEP)
-
     from filieres_database import FILIERES
     mods_4a = FILIERES.get("4A", {})
     ok = True
 
-    # (c) GI-ILSI : INFO41-44 doivent avoir seuil=12.0
-    gi_mods = mods_4a.get("GI-ILSI", {}).get("modules", {})
+    gi = mods_4a.get("GI-ILSI", {}).get("modules", {})
     for code in ["INFO41", "INFO42", "INFO43", "INFO44"]:
-        m = gi_mods.get(code, {})
+        m = gi.get(code, {})
         s, e = m.get("seuil"), m.get("eliminatoire")
         r = check(s == 12.0 and e == 8.0,
-                  f"4A/GI-ILSI/{code} : seuil={s}, eliminatoire={e}",
-                  f"attendu seuil=12.0, eliminatoire=8.0")
+                  f"4A/GI-ILSI/{code}: seuil={s}, eliminatoire={e}")
         ok = ok and r
 
-    # (d) GM-CISM : CISM41 doit avoir eliminatoire=8.0
-    cism_mods = mods_4a.get("GM-CISM", {}).get("modules", {})
-    m = cism_mods.get("CISM41", {})
+    cism = mods_4a.get("GM-CISM", {}).get("modules", {})
+    m = cism.get("CISM41", {})
     s, e = m.get("seuil"), m.get("eliminatoire")
     r = check(s == 12.0 and e == 8.0,
-              f"4A/GM-CISM/CISM41 : seuil={s}, eliminatoire={e}",
-              "attendu seuil=12.0, eliminatoire=8.0")
+              f"4A/GM-CISM/CISM41: seuil={s}, eliminatoire={e}",
+              "eliminatoire etait 80.0 (typo)")
     ok = ok and r
 
-    # (e) IATD-SI : IA41-45 doivent avoir seuil=12.0
-    ia_mods = mods_4a.get("IATD-SI", {}).get("modules", {})
+    ia = mods_4a.get("IATD-SI", {}).get("modules", {})
     for code in ["IA41", "IA42", "IA43", "IA44", "IA45"]:
-        m = ia_mods.get(code, {})
+        m = ia.get(code, {})
         s, e = m.get("seuil"), m.get("eliminatoire")
         r = check(s == 12.0 and e == 8.0,
-                  f"4A/IATD-SI/{code} : seuil={s}, eliminatoire={e}",
-                  "attendu seuil=12.0, eliminatoire=8.0")
+                  f"4A/IATD-SI/{code}: seuil={s}, eliminatoire={e}")
         ok = ok and r
 
     return ok
 
 
 # ═══════════════════════════════════════════════════════════════
-# TEST A — régression 3A/IATD-SI (pas d'élément éliminatoire)
+# TEST A — regression 3A/IATD-SI
 # ═══════════════════════════════════════════════════════════════
 def test_regression_3A():
     print(f"\n{SEP}")
-    print("TEST (a) — Régression 3A/IATD-SI : cas normal sans élément éliminatoire")
+    print("TEST (a) — Regression 3A/IATD-SI : 2 categories, aucun elem eliminatoire")
     print(SEP)
-
-    from calculator import (
-        calc_moy_module, get_decision_finale, check_elim_element,
-        calc_moy_element,
-    )
+    import calculator as cm
     from modules import MODULES
 
     ok = True
+    for mod_code, mod_info in MODULES.items():
+        seuil = mod_info["seuil"]
+        notes = {}
+        for ecode, ei in mod_info["elements"].items():
+            n = {"cc": None, "ex": None, "tp": None, "moy_sr": None, "decision": None}
+            if ei["coef_cc"] > 0: n["cc"] = 14.0
+            if ei["coef_ex"] > 0: n["ex"] = 14.0
+            if ei["coef_tp"] > 0: n["tp"] = 14.0
+            notes[ecode] = n
 
-    # Prend le premier module disponible (IA21 normalement)
+        elim_nom = cm.find_elim_element(notes, mod_code)
+        moy      = cm.calc_moy_module(notes, mod_code)
+        dec, rsn = cm.get_decision_finale(None, moy, seuil, elim_nom)
+
+        r1 = check(elim_nom is None,
+                   f"{mod_code}: aucun element eliminatoire (notes=14/20)",
+                   f"elim_nom={elim_nom}")
+        r2 = check(dec == DEC_VALIDE,
+                   f"{mod_code}: decision='{dec}'",
+                   f"attendu: '{DEC_VALIDE}'")
+        r3 = check(rsn is None, f"{mod_code}: raison=None")
+        ok = ok and r1 and r2 and r3
+
+    # Sous-test: 9/20 (< seuil mais > elim) -> Non valide sans raison
     mod_code = next(iter(MODULES))
     mod_info = MODULES[mod_code]
-    seuil    = mod_info["seuil"]
-    elim     = mod_info["eliminatoire"]
-
-    print(f"  Module testé : {mod_code} — seuil={seuil}, eliminatoire={elim}")
-
-    # Construit des notes correctes (toutes = 14/20)
-    notes_dict = {}
+    notes9 = {}
     for ecode, ei in mod_info["elements"].items():
         n = {"cc": None, "ex": None, "tp": None, "moy_sr": None, "decision": None}
-        if ei["coef_cc"] > 0: n["cc"] = 14.0
-        if ei["coef_ex"] > 0: n["ex"] = 14.0
-        if ei["coef_tp"] > 0: n["tp"] = 14.0
-        notes_dict[ecode] = n
-
-    moy      = calc_moy_module(notes_dict, mod_code)
-    has_elim = check_elim_element(notes_dict, mod_code)
-    decision = get_decision_finale(None, moy, seuil, has_elim_element=has_elim)
-
-    r1 = check(not has_elim,
-               "Aucun élément éliminatoire (notes=14/20 partout)",
-               f"has_elim={has_elim}")
-    r2 = check(moy is not None and moy >= seuil,
-               f"Moy_module={moy:.4f} ≥ seuil={seuil}",
-               f"moy={moy}")
-    r3 = check("Validé" in decision,
-               f"Décision = '{decision}'",
-               "attendu : contient 'Validé'")
-    ok = r1 and r2 and r3
-
-    # Notes basses mais PAS éliminatoires (toutes = 9/20)
-    for ecode in notes_dict:
-        for f in ("cc", "ex", "tp"):
-            if notes_dict[ecode][f] is not None:
-                notes_dict[ecode][f] = 9.0
-
-    moy2      = calc_moy_module(notes_dict, mod_code)
-    has_elim2 = check_elim_element(notes_dict, mod_code)
-    decision2 = get_decision_finale(None, moy2, seuil, has_elim_element=has_elim2)
-
-    print(f"\n  Sous-test : notes = 9/20 partout (moy attendue ~9, pas éliminatoire)")
-    r4 = check(not has_elim2,
-               f"Aucun élément éliminatoire (notes=9/20, elim=8.0)",
-               f"has_elim={has_elim2}")
-    r5 = check("Rattrapage" in decision2 or "Validé" in decision2,
-               f"Décision = '{decision2}'",
-               "attendu : Rattrapage ou Validé (pas Éliminatoire)")
-    ok = ok and r4 and r5
+        if ei["coef_cc"] > 0: n["cc"] = 9.0
+        if ei["coef_ex"] > 0: n["ex"] = 9.0
+        if ei["coef_tp"] > 0: n["tp"] = 9.0
+        notes9[ecode] = n
+    elim9    = cm.find_elim_element(notes9, mod_code)
+    moy9     = cm.calc_moy_module(notes9, mod_code)
+    dec9, r9 = cm.get_decision_finale(None, moy9, mod_info["seuil"], elim9)
+    print(f"\n  Sous-test {mod_code} (notes=9/20): dec='{dec9}', raison={r9}")
+    r4 = check(elim9 is None and dec9 == DEC_NON_VALID and r9 is None,
+               "Rattrapage sans eliminatoire: dec correcte, raison=None",
+               f"dec='{dec9}', elim_nom={elim9}, raison={r9}")
+    ok = ok and r4
 
     return ok
 
 
 # ═══════════════════════════════════════════════════════════════
-# TEST B — nouvelle règle éliminatoire AU NIVEAU ÉLÉMENT
+# TEST B — element eliminatoire
 # ═══════════════════════════════════════════════════════════════
-def test_elim_element_1A():
+def test_elim_element():
     print(f"\n{SEP}")
-    print("TEST (b) — Nouvelle règle éliminatoire au niveau élément")
-    print("           Cas 1 : API22  (coef_elem inégaux — moy module < seuil)")
-    print("           Cas 2 : API24  (coef_elem égaux   — moy module ≥ seuil)")
+    print("TEST (b) — Cas eliminatoire au niveau element")
+    print("  CAS 1: API22 (coef_elem 3.5/1.5)  — moy_module < seuil")
+    print("  CAS 2: API24 (coef_elem egaux 2.5) — moy_module >= seuil (BUG corrige)")
     print(SEP)
 
     from filieres_database import FILIERES
-    import calculator as calc_mod
-    from calculator import get_decision_finale, check_elim_element
+    import calculator as cm
 
     mods_1a = FILIERES["1A"]["API-MPT"]["modules"]
-    original_modules = calc_mod.MODULES
-    ok = True
+    orig    = cm.MODULES
+    ok      = True
 
-    # ── Cas 1 : API22 ────────────────────────────────────────────
+    # ── CAS 1 : API22 ──────────────────────────────────────────
     print("\n  CAS 1 — API22 (Thermodynamique et statique des fluides)")
-    mod22 = mods_1a["API22"]
-    seuil22, elim22 = mod22["seuil"], mod22["eliminatoire"]
-    print(f"    seuil={seuil22}, eliminatoire={elim22}")
+    mod22   = mods_1a["API22"]
+    seuil22 = mod22["seuil"]      # 11.0
+    elim22  = mod22["eliminatoire"]   # 7.0
+    c221    = mod22["elements"]["API221"]["coef_elem"]    # 3.5
+    c222    = mod22["elements"]["API222"]["coef_elem"]    # 1.5
+    moy22   = (6.0 * c221 + 18.0 * c222) / (c221 + c222)    # 9.6
 
-    coef221 = mod22["elements"]["API221"]["coef_elem"]  # 3.5
-    coef222 = mod22["elements"]["API222"]["coef_elem"]  # 1.5
-    moy22_calc = (6.0 * coef221 + 18.0 * coef222) / (coef221 + coef222)
-    print(f"    API221 moy_sr=6.0 (coef_elem={coef221}), API222 moy_sr=18.0 (coef_elem={coef222})")
-    print(f"    Moy_module = (6.0×{coef221} + 18.0×{coef222}) / {coef221+coef222} = {moy22_calc:.4f}")
-
-    notes_api22 = {
+    notes22 = {
         "API221": {"cc": None, "ex": None, "tp": None, "moy_sr": 6.0,  "decision": None},
         "API222": {"cc": None, "ex": None, "tp": None, "moy_sr": 18.0, "decision": None},
     }
+    cm.MODULES = {"API22": mod22}
+    elim_nom22      = cm.find_elim_element(notes22, "API22")
+    dec22, reason22 = cm.get_decision_finale(None, moy22, seuil22, elim_nom22)
+    cm.MODULES = orig
 
-    # Mock MODULES → 1A/API-MPT pour que check_elim_element trouve API22
-    calc_mod.MODULES = {"API22": mod22}
-    has_elim22 = check_elim_element(notes_api22, "API22")
-    calc_mod.MODULES = original_modules
+    nom_attendu22 = mod22["elements"]["API221"]["nom"]   # "Thermodynamique"
+    print(f"    API221 moy=6.0 (coef={c221}), API222 moy=18.0 (coef={c222})")
+    print(f"    Moy_module={moy22:.4f}, seuil={seuil22}, elim={elim22}")
+    print(f"    find_elim_element -> '{elim_nom22}'  (attendu: '{nom_attendu22}')")
+    print(f"    decision='{dec22}'")
+    print(f"    raison='{reason22}'")
 
-    ancienne_decision = (
-        "❌ Éliminatoire" if moy22_calc < elim22
-        else "⚠️ Rattrapage possible" if moy22_calc < seuil22
-        else "✅ Validé (estimé)"
-    )
-    nouvelle_decision = get_decision_finale(None, moy22_calc, seuil22, has_elim_element=has_elim22)
-
-    print(f"    ANCIENNE règle (moy_module vs elim) : {ancienne_decision}")
-    print(f"    NOUVELLE règle (élément vs elim)    : {nouvelle_decision}")
-
-    r1 = check(has_elim22,
-               "check_elim_element détecte API221=6.0 < elim=7.0",
-               f"has_elim={has_elim22}")
-    r2 = check("Éliminatoire" in nouvelle_decision,
-               f"Nouvelle décision = '{nouvelle_decision}'",
-               "attendu : contient 'Éliminatoire'")
-    r3 = check("Éliminatoire" not in ancienne_decision,
-               f"Ancienne décision = '{ancienne_decision}'",
-               "ancienne règle ne détectait PAS l'élément (moy_module=9.6 > elim=7.0)")
+    r1 = check(elim_nom22 == nom_attendu22,
+               f"find_elim_element retourne nom correct",
+               f"obtenu='{elim_nom22}', attendu='{nom_attendu22}'")
+    r2 = check(dec22 == DEC_NON_VALID,
+               f"decision='{dec22}'",
+               f"attendu: '{DEC_NON_VALID}'")
+    r3 = check(reason22 == REASON_PREFIX + nom_attendu22,
+               f"raison='{reason22}'",
+               f"attendu: '{REASON_PREFIX}{nom_attendu22}'")
     ok = r1 and r2 and r3
 
-    # ── Cas 2 : API24 — démontre "✅ Validé → ❌ Éliminatoire" ──
-    print("\n  CAS 2 — API24 (Automatisme et construction 2) — coef_elem égaux")
-    mod24 = mods_1a["API24"]
-    seuil24, elim24 = mod24["seuil"], mod24["eliminatoire"]
-    print(f"    seuil={seuil24}, eliminatoire={elim24}")
+    # ── CAS 2 : API24 — moy_module >= seuil mais elim ─────────
+    print("\n  CAS 2 — API24 (Automatisme et construction 2) — coef_elem egaux")
+    mod24   = mods_1a["API24"]
+    seuil24 = mod24["seuil"]
+    elim24  = mod24["eliminatoire"]
+    c241    = mod24["elements"]["API241"]["coef_elem"]    # 2.5
+    c242    = mod24["elements"]["API242"]["coef_elem"]    # 2.5
+    moy24   = (6.0 * c241 + 18.0 * c242) / (c241 + c242)    # 12.0
 
-    coef241 = mod24["elements"]["API241"]["coef_elem"]  # 2.5
-    coef242 = mod24["elements"]["API242"]["coef_elem"]  # 2.5
-    moy24_calc = (6.0 * coef241 + 18.0 * coef242) / (coef241 + coef242)  # → 12.0
-
-    notes_api24 = {
+    notes24 = {
         "API241": {"cc": None, "ex": None, "tp": None, "moy_sr": 6.0,  "decision": None},
         "API242": {"cc": None, "ex": None, "tp": None, "moy_sr": 18.0, "decision": None},
     }
-    print(f"    API241 moy_sr=6.0 (coef_elem={coef241}), API242 moy_sr=18.0 (coef_elem={coef242})")
-    print(f"    Moy_module = (6.0×{coef241} + 18.0×{coef242}) / {coef241+coef242} = {moy24_calc:.4f}")
+    cm.MODULES = {"API24": mod24}
+    elim_nom24      = cm.find_elim_element(notes24, "API24")
+    dec24, reason24 = cm.get_decision_finale(None, moy24, seuil24, elim_nom24)
+    cm.MODULES = orig
 
-    calc_mod.MODULES = {"API24": mod24}
-    has_elim24 = check_elim_element(notes_api24, "API24")
-    calc_mod.MODULES = original_modules
+    nom_attendu24 = mod24["elements"]["API241"]["nom"]   # "Automatisme"
+    print(f"    API241 moy=6.0 (coef={c241}), API242 moy=18.0 (coef={c242})")
+    print(f"    Moy_module={moy24:.4f} >= seuil={seuil24} (ancienne regle = Valide — BUG corrige)")
+    print(f"    find_elim_element -> '{elim_nom24}'")
+    print(f"    decision='{dec24}'")
+    print(f"    raison='{reason24}'")
 
-    ancienne24 = (
-        "❌ Éliminatoire" if moy24_calc < elim24
-        else "⚠️ Rattrapage possible" if moy24_calc < seuil24
-        else "✅ Validé (estimé)"
-    )
-    nouvelle24 = get_decision_finale(None, moy24_calc, seuil24, has_elim_element=has_elim24)
-
-    print(f"    ANCIENNE règle (moy_module vs elim) : {ancienne24}")
-    print(f"    NOUVELLE règle (élément vs elim)    : {nouvelle24}")
-
-    r4 = check(moy24_calc >= seuil24,
-               f"Moy_module={moy24_calc:.2f} ≥ seuil={seuil24} — ancienne règle = Validé",
-               "confirme que l'ancienne règle laissait passer ce cas")
-    r5 = check(has_elim24,
-               "check_elim_element détecte API241=6.0 < elim=7.0",
-               f"has_elim={has_elim24}")
-    r6 = check("Éliminatoire" in nouvelle24,
-               f"Nouvelle décision = '{nouvelle24}'",
-               "attendu : contient 'Éliminatoire'")
-    r7 = check("Validé" in ancienne24 and "Éliminatoire" not in ancienne24,
-               f"Ancienne décision = '{ancienne24}'",
-               "confirme l'ancienne règle retournait Validé (BUG corrigé)")
+    r4 = check(moy24 >= seuil24,
+               f"Moy_module={moy24:.2f} >= seuil={seuil24} (confirme le bug corrige)")
+    r5 = check(elim_nom24 == nom_attendu24,
+               f"find_elim_element -> '{elim_nom24}'",
+               f"attendu: '{nom_attendu24}'")
+    r6 = check(dec24 == DEC_NON_VALID,
+               f"decision='{dec24}'",
+               f"attendu: '{DEC_NON_VALID}'")
+    r7 = check(reason24 == REASON_PREFIX + nom_attendu24,
+               f"raison='{reason24}'",
+               f"attendu: '{REASON_PREFIX}{nom_attendu24}'")
     ok = ok and r4 and r5 and r6 and r7
+
+    # ── Affichage texte exact ───────────────────────────────────
+    print("\n  MESSAGE EXACT affiche dans Telegram (CAS 1 API22) :")
+    block = f"  \U0001f3c6 Décision : {dec22}"
+    if reason22:
+        block += f"\n     {reason22}"
+    print(f"  {block}")
+
+    print("\n  MESSAGE EXACT affiche dans Telegram (CAS 2 API24) :")
+    block2 = f"  \U0001f3c6 Décision : {dec24}"
+    if reason24:
+        block2 += f"\n     {reason24}"
+    print(f"  {block2}")
 
     return ok
 
 
 # ═══════════════════════════════════════════════════════════════
-# TEST — fallback minimum_x utilise bien module["seuil"]
+# TEST C — sous le seuil SANS element eliminatoire
 # ═══════════════════════════════════════════════════════════════
-def test_fallback_seuil():
+def test_sous_seuil_sans_elim():
     print(f"\n{SEP}")
-    print("TEST — Fallback minimum_x = module[\"seuil\"] (pas 12.0 hardcodé)")
+    print("TEST (c) — Sous le seuil, aucun element eliminatoire")
+    print("  Attendu: 'Non valide (rattrapage)' SANS raison supplementaire")
     print(SEP)
 
     from filieres_database import FILIERES
-    from calculator import calc_minimum_restant
+    import calculator as cm
 
-    # Vérifie pour un module 1A (seuil=11) : si on appelle calc_minimum_restant
-    # avec des notes vides, le résultat doit utiliser seuil=11 (pas 12)
     mods_1a = FILIERES["1A"]["API-MPT"]["modules"]
+    orig    = cm.MODULES
+    mod22   = mods_1a["API22"]
 
-    # Mock MODULES pour pointer sur API21 de 1A
-    import calculator as calc_mod
-    original_modules = calc_mod.MODULES
-    calc_mod.MODULES = {"API21": mods_1a["API21"]}
+    # moy=9.0 partout : >= elim=7.0, < seuil=11.0
+    notes = {
+        "API221": {"cc": None, "ex": None, "tp": None, "moy_sr": 9.0, "decision": None},
+        "API222": {"cc": None, "ex": None, "tp": None, "moy_sr": 9.0, "decision": None},
+    }
+    cm.MODULES = {"API22": mod22}
+    elim_nom    = cm.find_elim_element(notes, "API22")
+    moy         = cm.calc_moy_module(notes, "API22")
+    dec, reason = cm.get_decision_finale(None, moy, mod22["seuil"], elim_nom)
+    cm.MODULES = orig
 
-    notes_vides = {}  # aucune note
-    result = calc_minimum_restant(notes_vides, "API21")
+    print(f"  API221=9.0, API222=9.0 -> moy={moy:.2f}")
+    print(f"  seuil={mod22['seuil']}, eliminatoire={mod22['eliminatoire']}")
+    print(f"  find_elim_element -> {elim_nom}  (attendu: None)")
+    print(f"  decision='{dec}', raison={reason}")
 
-    calc_mod.MODULES = original_modules  # restaure
-
-    seuil_attendu = 11.0
-    minimum_obtenu = result["minimum"] if result else None
-    ok = check(
-        result is not None and result.get("minimum") is not None and abs(result["minimum"] - seuil_attendu) < 0.01,
-        f"calc_minimum_restant avec notes vides → minimum={minimum_obtenu}",
-        f"attendu ≈ {seuil_attendu} (seuil du module API21=1A)"
-    )
-    return ok
+    r1 = check(elim_nom is None,
+               "Aucun element eliminatoire (9.0 >= elim=7.0)")
+    r2 = check(dec == DEC_NON_VALID,
+               f"decision='{dec}'",
+               f"attendu: '{DEC_NON_VALID}'")
+    r3 = check(reason is None,
+               "raison=None (pas de ligne supplementaire)")
+    return r1 and r2 and r3
 
 
 # ═══════════════════════════════════════════════════════════════
-# TEST — vérification imports (pas de crash)
+# TEST — signature
 # ═══════════════════════════════════════════════════════════════
-def test_imports():
+def test_api_signature():
     print(f"\n{SEP}")
-    print("TEST — Vérification imports / syntaxe Python")
+    print("TEST — Signature API et imports")
     print(SEP)
     ok = True
+
     for name in ["calculator", "notifier", "modules"]:
         try:
             __import__(name)
             r = check(True, f"import {name} OK")
         except Exception as ex:
-            r = check(False, f"import {name} ÉCHOUÉ", str(ex))
+            r = check(False, f"import {name} ECHOUE", str(ex))
         ok = ok and r
-    # Vérifie que get_statut_module a bien été supprimée
-    import calculator
-    r = check(not hasattr(calculator, "get_statut_module"),
-              "get_statut_module supprimée (dead code)",
-              "si False : la fonction est encore présente")
+
+    import calculator as cm
+
+    # get_decision_finale doit retourner un tuple (dec, raison)
+    result = cm.get_decision_finale(None, 14.0, 12.0)
+    r = check(isinstance(result, tuple) and len(result) == 2,
+              f"get_decision_finale retourne un tuple de longueur 2",
+              f"valeur={result}")
     ok = ok and r
-    # Vérifie que check_elim_element est bien exportée
-    r = check(hasattr(calculator, "check_elim_element"),
-              "check_elim_element présente dans calculator",
-              "si False : la fonction est manquante")
-    ok = ok and r
+
+    # find_elim_element presente
+    r2 = check(hasattr(cm, "find_elim_element"), "find_elim_element presente")
+    # check_elim_element absente
+    r3 = check(not hasattr(cm, "check_elim_element"),
+               "check_elim_element absente (remplacee)")
+    ok = ok and r2 and r3
+
+    # Cas officiel VORD
+    dec_vord, rsn_vord = cm.get_decision_finale("VORD", 10.0, 12.0)
+    r4 = check(dec_vord == DEC_VORD and rsn_vord is None,
+               f"VORD -> '{dec_vord}', raison={rsn_vord}")
+    # Cas officiel NV
+    dec_nv, rsn_nv = cm.get_decision_finale("NV", 10.0, 12.0)
+    r5 = check(dec_nv == DEC_NV and rsn_nv is None,
+               f"NV   -> '{dec_nv}', raison={rsn_nv}")
+    ok = ok and r4 and r5
+
     return ok
 
 
@@ -318,22 +330,22 @@ def test_imports():
 # ═══════════════════════════════════════════════════════════════
 if __name__ == "__main__":
     results = []
-    results.append(("Imports / syntaxe",        test_imports()))
-    results.append(("Valeurs 4A base données",   test_database_values()))
-    results.append(("Régression 3A/IATD-SI",     test_regression_3A()))
-    results.append(("Règle élim. niveau élément", test_elim_element_1A()))
-    results.append(("Fallback seuil dynamique",  test_fallback_seuil()))
+    results.append(("API signature + imports",          test_api_signature()))
+    results.append(("Valeurs 4A base donnees (d/e/f)",  test_database_4A()))
+    results.append(("Regression 3A/IATD-SI (a)",        test_regression_3A()))
+    results.append(("Elim niveau element (b)",           test_elim_element()))
+    results.append(("Sous seuil sans elim (c)",          test_sous_seuil_sans_elim()))
 
-    print(f"\n{'═' * 60}")
+    print(f"\n{'=' * 62}")
     print("BILAN FINAL")
-    print('═' * 60)
+    print('=' * 62)
     all_ok = True
     for label, r in results:
-        print(f"  {'✅' if r else '❌'}  {label}")
+        print(f"  {'[OK]' if r else '[FAIL]'}  {label}")
         all_ok = all_ok and r
-    print()
+    print(f"\n  {_ok_count} PASS / {_fail_count} FAIL\n")
     if all_ok:
-        print("✅ TOUS LES TESTS PASSENT — prêt pour git push")
+        print("TOUS LES TESTS PASSENT — pret pour git push")
     else:
-        print("❌ CERTAINS TESTS ÉCHOUENT — NE PAS pousser avant correction")
+        print("CERTAINS TESTS ECHOUENT — NE PAS pousser")
     sys.exit(0 if all_ok else 1)

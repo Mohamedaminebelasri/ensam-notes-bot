@@ -21,7 +21,10 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 
 from scraper import get_notes
 from modules import MODULES
-from calculator import calc_minimum_restant
+from calculator import (
+    calc_minimum_restant, calc_moy_module,
+    get_decision_finale, find_elim_element,
+)
 from notifier import _build_table, _calc_moy_if_12
 from sim_handler import build_sim_handler
 
@@ -172,9 +175,17 @@ async def cmd_bilan(update: Update, context: ContextTypes.DEFAULT_TYPE):
         else:
             footer = "📊 Si 12 partout : —"
 
+        moy_real           = calc_moy_module(notes_dict, mod_code)
+        elim_nom           = find_elim_element(notes_dict, mod_code)
+        decision, reason   = get_decision_finale(None, moy_real, mod_info["seuil"], elim_nom)
+        decision_block     = f"🏆 {decision}"
+        if reason:
+            decision_block += f"\n   {reason}"
+
         msg = (
             f"📦 <b>{mod_info['nom']}</b>\n"
             f"<pre>{table}</pre>\n"
+            f"{decision_block}\n"
             f"{footer}"
         )
         await update.message.reply_text(msg, parse_mode="HTML")
